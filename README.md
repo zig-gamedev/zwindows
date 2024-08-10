@@ -1,4 +1,6 @@
-# zwin32 v0.10.0 - Zig bindings for Win32 API
+# zwin32
+
+Zig bindings for Win32 API
 
 Can be used on Windows and Linux. Contains partial bindings for:
 * Win32 API
@@ -15,12 +17,7 @@ Can be used on Windows and Linux. Contains partial bindings for:
 
 ## Getting started
 
-Copy `zwin32` to a subdirectory of your project and add the following to your `build.zig.zon` .dependencies:
-```zig
-    .zwin32 = .{ .path = "libs/zwin32" },
-```
-
-Then in your `build.zig` add:
+Add `zwin32` your build.zig.zon dependencies and in your `build.zig` add:
 
 ```zig
 pub fn build(b: *std.Build) !void {
