@@ -12,13 +12,13 @@ pub fn install_xaudio2(
     install_dir: std.Build.InstallDir,
 ) void {
     const b = step.owner;
-    const source_path_prefix = comptime std.fs.path.dirname(@src().file) orelse ".";
     step.dependOn(
         &b.addInstallFileWithDir(
             .{
-                .cwd_relative = b.pathJoin(
-                    &.{ source_path_prefix, "bin/x64/xaudio2_9redist.dll" },
-                ),
+                .dependency = .{
+                    .dependency = b.dependency("zwin32", .{}),
+                    .sub_path = "bin/x64/xaudio2_9redist.dll",
+                },
             },
             install_dir,
             "xaudio2_9redist.dll",
@@ -31,13 +31,14 @@ pub fn install_d3d12(
     install_dir: std.Build.InstallDir,
 ) void {
     const b = step.owner;
-    const source_path_prefix = comptime std.fs.path.dirname(@src().file) orelse ".";
+    const zwin32 = b.dependency("zwin32", .{});
     step.dependOn(
         &b.addInstallFileWithDir(
             .{
-                .cwd_relative = b.pathJoin(
-                    &.{ source_path_prefix, "bin/x64/D3D12Core.dll" },
-                ),
+                .dependency = .{
+                    .dependency = zwin32,
+                    .sub_path = "bin/x64/D3D12Core.dll",
+                },
             },
             install_dir,
             "d3d12/D3D12Core.dll",
@@ -46,9 +47,10 @@ pub fn install_d3d12(
     step.dependOn(
         &b.addInstallFileWithDir(
             .{
-                .cwd_relative = b.pathJoin(
-                    &.{ source_path_prefix, "bin/x64/D3D12SDKLayers.dll" },
-                ),
+                .dependency = .{
+                    .dependency = zwin32,
+                    .sub_path = "bin/x64/D3D12SDKLayers.dll",
+                },
             },
             install_dir,
             "d3d12/D3D12SDKLayers.dll",
@@ -61,13 +63,13 @@ pub fn install_directml(
     install_dir: std.Build.InstallDir,
 ) void {
     const b = step.owner;
-    const source_path_prefix = comptime std.fs.path.dirname(@src().file) orelse ".";
     step.dependOn(
         &b.addInstallFileWithDir(
             .{
-                .cwd_relative = b.pathJoin(
-                    &.{ source_path_prefix, "bin/x64/DirectML.dll" },
-                ),
+                .dependency = .{
+                    .dependency = b.dependency("zwin32", .{}),
+                    .sub_path = "bin/x64/DirectML.dll",
+                },
             },
             install_dir,
             "DirectML.dll",
@@ -76,9 +78,10 @@ pub fn install_directml(
     step.dependOn(
         &b.addInstallFileWithDir(
             .{
-                .cwd_relative = b.pathJoin(
-                    &.{ source_path_prefix, "bin/x64/DirectML.Debug.dll" },
-                ),
+                .dependency = .{
+                    .dependency = b.dependency("zwin32", .{}),
+                    .sub_path = "bin/x64/DirectML.Debug.dll",
+                },
             },
             install_dir,
             "DirectML.Debug.dll",
@@ -163,10 +166,11 @@ pub const CompileShaders = struct {
     ) void {
         const b = self.step.owner;
 
-        const zwin32_path = comptime std.fs.path.dirname(@src().file) orelse ".";
+        const zwin32 = b.dependency("zwin32", .{});
+
         const dxc_path = switch (builtin.target.os.tag) {
-            .windows => zwin32_path ++ "/bin/x64/dxc.exe",
-            .linux => zwin32_path ++ "/bin/x64/dxc",
+            .windows => zwin32.path("bin/x64/dxc.exe").getPath(b),
+            .linux => zwin32.path("bin/x64/dxc").getPath(b),
             else => @panic("Unsupported target"),
         };
 
@@ -184,10 +188,7 @@ pub const CompileShaders = struct {
 
         const cmd_step = b.addSystemCommand(&dxc_command);
         if (builtin.target.os.tag == .linux) {
-            cmd_step.setEnvironmentVariable(
-                "LD_LIBRARY_PATH",
-                zwin32_path ++ "/bin/x64",
-            );
+            cmd_step.setEnvironmentVariable("LD_LIBRARY_PATH", zwin32.path("bin/x64").getPath(b));
         }
         self.step.dependOn(&cmd_step.step);
     }
