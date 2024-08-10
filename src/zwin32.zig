@@ -1,3 +1,11 @@
+const std = @import("std");
+const panic = std.debug.panic;
+const assert = std.debug.assert;
+
+comptime {
+    std.testing.refAllDeclsRecursive(@This());
+}
+
 pub const w32 = @import("w32.zig");
 pub const dwrite = @import("dwrite.zig");
 pub const dxgi = @import("dxgi.zig");
@@ -19,16 +27,8 @@ pub const xinput = @import("xinput.zig");
 pub const dds_loader = @import("dds_loader.zig");
 pub const d3dcompiler = @import("d3dcompiler.zig");
 
-test {
-    std.testing.refAllDeclsRecursive(@This());
-}
-
 const HRESULT = w32.HRESULT;
 const S_OK = w32.S_OK;
-
-const std = @import("std");
-const panic = std.debug.panic;
-const assert = std.debug.assert;
 
 // TODO: Handle more error codes from https://docs.microsoft.com/en-us/windows/win32/com/com-error-codes-10
 pub const HResultError =
