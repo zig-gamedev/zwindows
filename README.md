@@ -1,4 +1,4 @@
-# zwindows
+# [zwindows](https://github.com/zig-gamedev/zwindows)
 
 Windows development SDK for Zig game developers.
 
