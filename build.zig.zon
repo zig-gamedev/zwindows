@@ -1,7 +1,6 @@
 .{
-    .name = "zwin32",
-    .version = "0.10.0",
-    .minimum_zig_version = "0.13.0-dev.351+64ef45eb0",
+    .name = "zwindows",
+    .version = "0.1.0",
     .paths = .{
         "build.zig",
         "build.zig.zon",
