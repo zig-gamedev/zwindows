@@ -21,11 +21,6 @@ Windows development SDK for Zig game developers.
 
 ## Using the Zig package
 
-Copy `zwindows` to a subdirectory of your project and add the following to your `build.zig.zon` .dependencies:
-```zig
-    .zwindows = .{ .path = "libs/zwindows" },
-```
-
 Example build.zig
 ```zig
 pub fn build(b: *std.Build) !void {
