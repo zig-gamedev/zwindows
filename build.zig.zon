@@ -1,11 +1,12 @@
 .{
     .name = "zwindows",
-    .version = "0.1.0",
+    .version = "0.2.0-dev",
     .paths = .{
         "build.zig",
         "build.zig.zon",
         "bin",
         "src",
         "README.md",
+        "LICENSE",
     },
 }
