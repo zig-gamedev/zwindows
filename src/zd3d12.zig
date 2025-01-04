@@ -264,10 +264,10 @@ pub const GraphicsContext = struct {
         {
             var data: d3d12.FEATURE_DATA_SHADER_MODEL = .{ .HighestShaderModel = .@"6_7" };
             const hr = device.CheckFeatureSupport(.SHADER_MODEL, &data, @sizeOf(d3d12.FEATURE_DATA_SHADER_MODEL));
-            if (hr != windows.S_OK or @intFromEnum(data.HighestShaderModel) < @intFromEnum(d3d12.SHADER_MODEL.@"6_6")) {
+            if (hr != windows.S_OK or @intFromEnum(data.HighestShaderModel) < @intFromEnum(d3d12.SHADER_MODEL.@"6_7")) {
                 _ = windows.MessageBoxA(
                     args.window,
-                    "This applications requires graphics card driver that supports Shader Model 6.6. " ++
+                    "This applications requires graphics card driver that supports Shader Model 6.7. " ++
                         "Please update your graphics driver and try again.",
                     "Your graphics card driver may be old",
                     windows.MB_OK | windows.MB_ICONERROR,
