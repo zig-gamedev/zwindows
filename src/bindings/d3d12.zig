@@ -111,7 +111,7 @@ pub const HEAP_PROPERTIES = extern struct {
     pub fn initType(heap_type: HEAP_TYPE) HEAP_PROPERTIES {
         var v = std.mem.zeroes(@This());
         v = HEAP_PROPERTIES{
-            .Type = heap_type,
+            .type = heap_type,
             .CPUPageProperty = .UNKNOWN,
             .MemoryPoolPreference = .UNKNOWN,
             .CreationNodeMask = 0,
@@ -583,7 +583,7 @@ pub const RESOURCE_BARRIER = extern struct {
 
     pub fn initUav(resource: *IResource) RESOURCE_BARRIER {
         var v = std.mem.zeroes(@This());
-        v = .{ .Type = .UAV, .Flags = .{}, .u = .{ .UAV = .{ .pResource = resource } } };
+        v = .{ .type = .UAV, .Flags = .{}, .u = .{ .UAV = .{ .pResource = resource } } };
         return v;
     }
 };

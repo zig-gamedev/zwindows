@@ -297,7 +297,7 @@ pub const GraphicsContext = struct {
         const cmdqueue = blk: {
             var cmdqueue: *d3d12.ICommandQueue = undefined;
             hrPanicOnFail(device.CreateCommandQueue(&.{
-                .Type = .DIRECT,
+                .type = .DIRECT,
                 .Priority = @intFromEnum(d3d12.COMMAND_QUEUE_PRIORITY.NORMAL),
                 .Flags = .{},
                 .NodeMask = 0,
@@ -1175,7 +1175,7 @@ pub const GraphicsContext = struct {
             for (gctx.transition_resource_barriers.items) |barrier| {
                 if (gctx.resource_pool.isResourceValid(barrier.resource)) {
                     d3d12_barriers[num_valid_barriers] = .{
-                        .Type = .TRANSITION,
+                        .type = .TRANSITION,
                         .Flags = .{},
                         .u = .{
                             .Transition = .{
@@ -1604,11 +1604,11 @@ pub const GraphicsContext = struct {
 
         gctx.cmdlist.CopyTextureRegion(&.{
             .pResource = gctx.lookupResource(texture).?,
-            .Type = .SUBRESOURCE_INDEX,
+            .type = .SUBRESOURCE_INDEX,
             .u = .{ .SubresourceIndex = subresource },
         }, 0, 0, 0, &.{
             .pResource = upload.buffer,
-            .Type = .PLACED_FOOTPRINT,
+            .type = .PLACED_FOOTPRINT,
             .u = .{ .PlacedFootprint = layout[0] },
         }, null);
     }
@@ -1642,11 +1642,11 @@ pub const GraphicsContext = struct {
 
         gctx.cmdlist.CopyTextureRegion(&d3d12.TEXTURE_COPY_LOCATION{
             .pResource = gctx.lookupResource(texture).?,
-            .Type = .SUBRESOURCE_INDEX,
+            .type = .SUBRESOURCE_INDEX,
             .u = .{ .SubresourceIndex = 0 },
         }, 0, 0, 0, &d3d12.TEXTURE_COPY_LOCATION{
             .pResource = upload.buffer,
-            .Type = .PLACED_FOOTPRINT,
+            .type = .PLACED_FOOTPRINT,
             .u = .{ .PlacedFootprint = layout[0] },
         }, null);
 
@@ -1781,11 +1781,11 @@ pub const GraphicsContext = struct {
 
         gctx.cmdlist.CopyTextureRegion(&d3d12.TEXTURE_COPY_LOCATION{
             .pResource = gctx.lookupResource(texture).?,
-            .Type = .SUBRESOURCE_INDEX,
+            .type = .SUBRESOURCE_INDEX,
             .u = .{ .SubresourceIndex = 0 },
         }, 0, 0, 0, &d3d12.TEXTURE_COPY_LOCATION{
             .pResource = upload.buffer,
-            .Type = .PLACED_FOOTPRINT,
+            .type = .PLACED_FOOTPRINT,
             .u = .{ .PlacedFootprint = layout[0] },
         }, null);
 
@@ -1886,11 +1886,11 @@ pub const GraphicsContext = struct {
 
             gctx.cmdlist.CopyTextureRegion(&.{
                 .pResource = gctx.lookupResource(texture).?,
-                .Type = .SUBRESOURCE_INDEX,
+                .type = .SUBRESOURCE_INDEX,
                 .u = .{ .SubresourceIndex = subresource_index },
             }, 0, 0, 0, &.{
                 .pResource = upload.buffer,
-                .Type = .PLACED_FOOTPRINT,
+                .type = .PLACED_FOOTPRINT,
                 .u = .{ .PlacedFootprint = layout[0] },
             }, null);
         }
@@ -2182,13 +2182,13 @@ pub const MipmapGenerator = struct {
                 while (mip_index < dispatch_num_mips) : (mip_index += 1) {
                     const dst = d3d12.TEXTURE_COPY_LOCATION{
                         .pResource = gctx.lookupResource(texture_handle).?,
-                        .Type = .SUBRESOURCE_INDEX,
+                        .type = .SUBRESOURCE_INDEX,
                         .u = .{ .SubresourceIndex = mip_index + 1 + current_src_mip_level +
                             array_slice * texture_desc.MipLevels },
                     };
                     const src = d3d12.TEXTURE_COPY_LOCATION{
                         .pResource = gctx.lookupResource(mipgen.scratch_textures[mip_index]).?,
-                        .Type = .SUBRESOURCE_INDEX,
+                        .type = .SUBRESOURCE_INDEX,
                         .u = .{ .SubresourceIndex = 0 },
                     };
                     const box = d3d12.BOX{
@@ -2489,7 +2489,7 @@ const DescriptorHeap = struct {
         const heap = blk: {
             var heap: ?*d3d12.IDescriptorHeap = null;
             hrPanicOnFail(device.CreateDescriptorHeap(&.{
-                .Type = heap_type,
+                .type = heap_type,
                 .NumDescriptors = capacity,
                 .Flags = flags,
                 .NodeMask = 0,
