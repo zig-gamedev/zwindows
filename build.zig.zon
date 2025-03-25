@@ -1,5 +1,6 @@
 .{
-    .name = "zwindows",
+    .name = .zwindows,
+    .fingerprint = 0x263908d4bb75c6c4,
     .version = "0.2.0-dev",
     .paths = .{
         "build.zig",
