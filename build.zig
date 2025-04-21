@@ -244,11 +244,14 @@ pub fn addCompileShaders(
         else => @panic("Unsupported target"),
     };
     switch (builtin.target.os.tag) {
-        .linux, .macos => {
+        .windows => {
+            const takeown = b.addSystemCommand(&.{ "takeown", "/f", dxc_path });
+            build_shaders.dependOn(&takeown.step);
+        },
+        else => {
             const chmod = b.addSystemCommand(&.{ "chmod", "+x", dxc_path });
             build_shaders.dependOn(&chmod.step);
         },
-        else => {},
     }
 
     return .{
