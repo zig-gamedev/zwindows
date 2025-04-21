@@ -45,7 +45,6 @@ pub fn build(b: *std.Build) !void {
             .{ .name = "options", .module = options_module },
             .{ .name = "zwindows", .module = zwindows_module },
         },
-
     });
 }
 
@@ -226,14 +225,6 @@ pub const CompileShaders = struct {
                 self.zwindows.path("bin/x64").getPath(b),
             );
         }
-        
-        switch (builtin.target.os.tag) {
-            .linux, .macos => {
-                const chmod = b.addSystemCommand(&.{ "chmod", "+x", dxc_path });
-                cmd_step.step.dependOn(&chmod.step);
-            },
-            else => {},
-        }
 
         self.step.dependOn(&cmd_step.step);
     }
@@ -245,8 +236,23 @@ pub fn addCompileShaders(
     zwindows: *std.Build.Dependency,
     options: struct { shader_ver: []const u8 },
 ) CompileShaders {
+    const build_shaders = b.step(name ++ "-dxc", "Build shaders for '" ++ name ++ "'");
+
+    const dxc_path = switch (builtin.target.os.tag) {
+        .windows => zwindows.path("bin/x64/dxc.exe").getPath(b),
+        .linux => zwindows.path("bin/x64/dxc").getPath(b),
+        else => @panic("Unsupported target"),
+    };
+    switch (builtin.target.os.tag) {
+        .linux, .macos => {
+            const chmod = b.addSystemCommand(&.{ "chmod", "+x", dxc_path });
+            build_shaders.dependOn(&chmod.step);
+        },
+        else => {},
+    }
+
     return .{
-        .step = b.step(name ++ "-dxc", "Build shaders for '" ++ name ++ "'"),
+        .step = build_shaders,
         .zwindows = zwindows,
         .shader_ver = options.shader_ver,
     };
