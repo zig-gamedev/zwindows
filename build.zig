@@ -45,6 +45,7 @@ pub fn build(b: *std.Build) !void {
             .{ .name = "options", .module = options_module },
             .{ .name = "zwindows", .module = zwindows_module },
         },
+
     });
 }
 
@@ -225,6 +226,15 @@ pub const CompileShaders = struct {
                 self.zwindows.path("bin/x64").getPath(b),
             );
         }
+        
+        switch (builtin.target.os.tag) {
+            .linux, .macos => {
+                const chmod = b.addSystemCommand(&.{ "chmod", "+x", dxc_path });
+                cmd_step.step.dependOn(&chmod.step);
+            },
+            else => {},
+        }
+
         self.step.dependOn(&cmd_step.step);
     }
 };
