@@ -48,6 +48,30 @@ pub fn build(b: *std.Build) !void {
     });
 }
 
+pub fn activateSdk(b: *std.Build, zwindows: *std.Build.Dependency) *std.Build.Step {
+    const step = b.allocator.create(std.Build.Step) catch unreachable;
+    step.* = std.Build.Step.init(.{
+        .id = .custom,
+        .name = "Activate zwindows",
+        .owner = b,
+        .makeFn = &struct {
+            fn make(_: *std.Build.Step, _: std.Build.Step.MakeOptions) anyerror!void {}
+        }.make,
+    });
+    switch (builtin.target.os.tag) {
+        .windows => {
+            const dxc_path = zwindows.path("bin/x64/dxc.exe").getPath(b);
+            step.dependOn(&b.addSystemCommand(&.{ "takeown", "/f", dxc_path }).step);
+        },
+        .linux => {
+            const dxc_path = zwindows.path("bin/x64/dxc").getPath(b);
+            step.dependOn(&b.addSystemCommand(&.{ "chmod", "+x", dxc_path }).step);
+        },
+        else => @panic("Unsupported host OS."),
+    }
+    return step;
+}
+
 pub fn install_xaudio2(
     step: *std.Build.Step,
     zwindows: *std.Build.Dependency,
@@ -203,7 +227,7 @@ pub const CompileShaders = struct {
         const dxc_path = switch (builtin.target.os.tag) {
             .windows => self.zwindows.path("bin/x64/dxc.exe").getPath(b),
             .linux => self.zwindows.path("bin/x64/dxc").getPath(b),
-            else => @panic("Unsupported target"),
+            else => @panic("Unsupported host OS."),
         };
 
         const dxc_command = [9][]const u8{
@@ -236,26 +260,8 @@ pub fn addCompileShaders(
     zwindows: *std.Build.Dependency,
     options: struct { shader_ver: []const u8 },
 ) CompileShaders {
-    const build_shaders = b.step(name ++ "-dxc", "Build shaders for '" ++ name ++ "'");
-
-    const dxc_path = switch (builtin.target.os.tag) {
-        .windows => zwindows.path("bin/x64/dxc.exe").getPath(b),
-        .linux => zwindows.path("bin/x64/dxc").getPath(b),
-        else => @panic("Unsupported target"),
-    };
-    switch (builtin.target.os.tag) {
-        .windows => {
-            const takeown = b.addSystemCommand(&.{ "takeown", "/f", dxc_path });
-            build_shaders.dependOn(&takeown.step);
-        },
-        else => {
-            const chmod = b.addSystemCommand(&.{ "chmod", "+x", dxc_path });
-            build_shaders.dependOn(&chmod.step);
-        },
-    }
-
     return .{
-        .step = build_shaders,
+        .step = b.step(name ++ "-dxc", "Build shaders for '" ++ name ++ "'"),
         .zwindows = zwindows,
         .shader_ver = options.shader_ver,
     };
