@@ -203,6 +203,23 @@ pub extern "user32" fn CreateWindowExA(
     lpParam: ?LPVOID,
 ) callconv(WINAPI) ?HWND;
 
+pub extern "user32" fn ShowWindow(
+    hwnd: HWND,
+    nCmdShow: i32,
+) callconv(WINAPI) bool;
+
+pub extern "user32" fn IsWindow(hwnd: ?HWND) callconv(WINAPI) bool;
+
+pub extern "user32" fn SetWindowPos(
+    hWnd: HWND,
+    hWndInsertAfter: ?HWND,
+    X: i32,
+    Y: i32,
+    cx: i32,
+    cY: i32,
+    uFlags: UINT,
+) callconv(WINAPI) bool;
+
 pub extern "user32" fn DestroyWindow(hWnd: HWND) BOOL;
 
 pub extern "user32" fn PostQuitMessage(nExitCode: i32) callconv(WINAPI) void;
