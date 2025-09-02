@@ -47,6 +47,7 @@ const HWND = std.os.windows.HWND;
 const HDC = std.os.windows.HDC;
 const HGLRC = std.os.windows.HGLRC;
 const FARPROC = std.os.windows.FARPROC;
+const PROC = std.os.windows.PROC;
 const INT = std.os.windows.INT;
 const SIZE_T = std.os.windows.SIZE_T;
 const UINT = std.os.windows.UINT;
@@ -138,6 +139,10 @@ pub const MINMAXINFO = extern struct {
     ptMinTrackSize: POINT,
     ptMaxTrackSize: POINT,
 };
+
+pub extern "user32" fn GetDC(hWnd: HWND) callconv(WINAPI) HDC;
+
+pub extern "user32" fn ReleaseDC(hWnd: HWND, hdc: HDC) callconv(WINAPI) c_int;
 
 pub extern "user32" fn SetProcessDPIAware() callconv(WINAPI) BOOL;
 
@@ -284,15 +289,33 @@ pub extern "shell32" fn SHGetKnownFolderPath(
 
 pub const WS_BORDER = 0x00800000;
 pub const WS_OVERLAPPED = 0x00000000;
+pub const WS_CHILD = 0x40000000;
+pub const WS_CHILDWINDOW = WS_CHILD;
+pub const WS_CLIPCHILDREN = 0x02000000;
+pub const WS_CLIPSIBLINGS = 0x04000000;
+pub const WS_DISABLED = 0x08000000;
+pub const WS_GROUP = 0x00020000;
 pub const WS_SYSMENU = 0x00080000;
 pub const WS_DLGFRAME = 0x00400000;
+pub const WS_HSCROLL = 0x00100000;
+pub const WS_ICONIC = 0x20000000;
 pub const WS_CAPTION = WS_BORDER | WS_DLGFRAME;
+pub const WS_MINIMIZE = 0x20000000;
 pub const WS_MINIMIZEBOX = 0x00020000;
+pub const WS_MAXIMIZE = 0x01000000;
 pub const WS_MAXIMIZEBOX = 0x00010000;
 pub const WS_THICKFRAME = 0x00040000;
 pub const WS_OVERLAPPEDWINDOW = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME |
     WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
+pub const WS_POPUP = 0x80000000;
+pub const WS_POPUPWINDOW = WS_POPUP | WS_BORDER | WS_SYSMENU;
+pub const WS_SIZEBOX = 0x00040000;
+pub const WS_TABSTOP = 0x00010000;
+pub const WS_TILED = 0x00000000;
+pub const WS_TILEDWINDOW = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME |
+    WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
 pub const WS_VISIBLE = 0x10000000;
+pub const WS_VSCROLL = 0x00200000;
 
 pub const WM_MOUSEMOVE = 0x0200;
 pub const WM_LBUTTONDOWN = 0x0201;
@@ -389,6 +412,19 @@ pub const WNDCLASSEXA = extern struct {
     lpszClassName: LPCSTR,
     hIconSm: ?HICON,
 };
+
+pub const CS_BYTEALIGNCLIENT: comptime_int = 0x1000;
+pub const CS_BYTEALIGNWINDOW: comptime_int = 0x2000;
+pub const CS_CLASSDC: comptime_int = 0x0040;
+pub const CS_DBLCLKS: comptime_int = 0x0008;
+pub const CS_DROPSHADOW: comptime_int = 0x00020000;
+pub const CS_GLOBALCLASS: comptime_int = 0x4000;
+pub const CS_HREDRAW: comptime_int = 0x0002;
+pub const CS_NOCLOSE: comptime_int = 0x0200;
+pub const CS_OWNDC: comptime_int = 0x0020;
+pub const CS_PARENTDC: comptime_int = 0x0080;
+pub const CS_SAVEBITS: comptime_int = 0x0800;
+pub const CS_VREDRAW: comptime_int = 0x0001;
 
 pub const OSVERSIONINFOW = extern struct {
     dwOSVersionInfoSize: ULONG,
@@ -577,3 +613,85 @@ pub const IM_VK_KEYPAD_ENTER = VK_RETURN + 256;
 pub const KF_EXTENDED = 0x0100;
 
 pub const GUID_NULL = GUID.parse("{00000000-0000-0000-0000-000000000000}");
+
+pub const PIXELFORMATDESCRIPTOR = extern struct {
+    nSize: WORD,
+    nVersion: WORD,
+    dwFlags: DWORD,
+    iPixelType: BYTE,
+    cColorBits: BYTE,
+    cRedBits: BYTE,
+    cRedShift: BYTE,
+    cGreenBits: BYTE,
+    cGreenShift: BYTE,
+    cBlueBits: BYTE,
+    cBlueShift: BYTE,
+    cAlphaBits: BYTE,
+    cAlphaShift: BYTE,
+    cAccumBits: BYTE,
+    cAccumRedBits: BYTE,
+    cAccumGreenBits: BYTE,
+    cAccumBlueBits: BYTE,
+    cAccumAlphaBits: BYTE,
+    cDepthBits: BYTE,
+    cStencilBits: BYTE,
+    cAuxBuffers: BYTE,
+    iLayerType: BYTE,
+    bReserved: BYTE,
+    dwLayerMask: DWORD,
+    dwVisibleMask: DWORD,
+    dwDamageMask: DWORD,
+};
+
+pub const PFD_DRAW_TO_WINDOW: comptime_int = 0x00000004;
+pub const PFD_DRAW_TO_BITMAP: comptime_int = 0x00000008;
+pub const PFD_SUPPORT_GDI: comptime_int = 0x00000010;
+pub const PFD_SUPPORT_OPENGL: comptime_int = 0x00000020;
+pub const PFD_GENERIC_ACCELERATED: comptime_int = 0x00001000;
+pub const PFD_GENERIC_FORMAT: comptime_int = 0x00000040;
+pub const PFD_NEED_PALETTE: comptime_int = 0x00000080;
+pub const PFD_NEED_SYSTEM_PALETTE: comptime_int = 0x00000100;
+pub const PFD_DOUBLEBUFFER: comptime_int = 0x00000002;
+pub const PFD_STEREO: comptime_int = 0x00000001;
+pub const PFD_SWAP_LAYER_BUFFERS: comptime_int = 0x00000800;
+
+pub const PFD_DEPTH_DONTCARE: comptime_int = 0x20000000;
+pub const PFD_DOUBLEBUFFER_DONTCARE: comptime_int = 0x40000000;
+pub const PFD_STEREO_DONTCARE: comptime_int = 0x80000000;
+
+pub const PFD_SWAP_COPY: comptime_int = 0x00000400;
+pub const PFD_SWAP_EXCHANGE: comptime_int = 0x00000200;
+
+pub const PFD_TYPE_RGBA: comptime_int = 0;
+pub const PFD_TYPE_COLORINDEX: comptime_int = 1;
+
+pub extern "Gdi32" fn DescribePixelFormat(
+    hdc: HDC,
+    iPixelFormat: c_int,
+    nBytes: UINT,
+    ppfd: *const PIXELFORMATDESCRIPTOR,
+) callconv(WINAPI) c_int;
+
+pub extern "Gdi32" fn ChoosePixelFormat(
+    hdc: HDC,
+    ppfd: *const PIXELFORMATDESCRIPTOR,
+) callconv(WINAPI) c_int;
+
+pub extern "Gdi32" fn SetPixelFormat(
+    hdc: HDC,
+    format: c_int,
+    ppfd: *const PIXELFORMATDESCRIPTOR,
+) callconv(WINAPI) bool;
+
+pub extern "Gdi32" fn SwapBuffers(hdc: HDC) callconv(WINAPI) BOOL;
+
+pub extern "Opengl32" fn wglCreateContext(hdc: HDC) callconv((WINAPI)) HGLRC;
+
+pub extern "Opengl32" fn wglDeleteContext(unnamedParam1: HGLRC) callconv((WINAPI)) BOOL;
+
+pub extern "Opengl32" fn wglMakeCurrent(
+    hdc: HDC,
+    glContext: HGLRC,
+) callconv((WINAPI)) BOOL;
+
+pub extern "Opengl32" fn wglGetProcAddress(unnamedParam1: LPCSTR) callconv((WINAPI)) ?PROC;
