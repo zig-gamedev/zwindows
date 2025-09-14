@@ -685,13 +685,13 @@ pub extern "Gdi32" fn SetPixelFormat(
 
 pub extern "Gdi32" fn SwapBuffers(hdc: HDC) callconv(WINAPI) BOOL;
 
-pub extern "Opengl32" fn wglCreateContext(hdc: HDC) callconv((WINAPI)) HGLRC;
+pub extern "Opengl32" fn wglCreateContext(hdc: HDC) callconv(WINAPI) HGLRC;
 
-pub extern "Opengl32" fn wglDeleteContext(unnamedParam1: HGLRC) callconv((WINAPI)) BOOL;
+pub extern "Opengl32" fn wglDeleteContext(unnamedParam1: HGLRC) callconv(WINAPI) BOOL;
 
 pub extern "Opengl32" fn wglMakeCurrent(
     hdc: HDC,
     glContext: HGLRC,
-) callconv((WINAPI)) BOOL;
+) callconv(WINAPI) BOOL;
 
-pub extern "Opengl32" fn wglGetProcAddress(unnamedParam1: LPCSTR) callconv((WINAPI)) ?PROC;
+pub extern "Opengl32" fn wglGetProcAddress(unnamedParam1: LPCSTR) callconv(WINAPI) ?PROC;
