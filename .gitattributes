@@ -12,3 +12,4 @@
 *.a filter=lfs diff=lfs merge=lfs -text
 bin/x64/dxc filter=lfs diff=lfs merge=lfs -text
 bin/x64/libdxcompiler.so.3.7 filter=lfs diff=lfs merge=lfs -text
+.lfs-content-token filter=lfs diff=lfs merge=lfs -text

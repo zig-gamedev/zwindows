@@ -2,6 +2,13 @@ const std = @import("std");
 const builtin = @import("builtin");
 
 pub fn build(b: *std.Build) !void {
+    checkGitLfsContent() catch {
+        try ensureGit(b.allocator);
+        try ensureGitLfs(b.allocator, "install");
+        try ensureGitLfs(b.allocator, "pull");
+        try checkGitLfsContent();
+    };
+
     const options = .{
         .zxaudio2_debug_layer = b.option(
             bool,
@@ -265,4 +272,82 @@ pub fn addCompileShaders(
         .zwindows = zwindows,
         .shader_ver = options.shader_ver,
     };
+}
+
+fn ensureGit(allocator: std.mem.Allocator) !void {
+    const printErrorMsg = (struct {
+        fn impl() void {
+            std.log.err("\n" ++
+                \\---------------------------------------------------------------------------
+                \\
+                \\'git version' failed. Is Git not installed?
+                \\
+                \\---------------------------------------------------------------------------
+                \\
+            , .{});
+        }
+    }).impl;
+    const argv = &[_][]const u8{ "git", "version" };
+    const result = std.process.Child.run(.{
+        .allocator = allocator,
+        .argv = argv,
+    }) catch { // e.g. FileNotFound
+        printErrorMsg();
+        return error.GitNotFound;
+    };
+    defer {
+        allocator.free(result.stderr);
+        allocator.free(result.stdout);
+    }
+    if (result.term.Exited != 0) {
+        printErrorMsg();
+        return error.GitNotFound;
+    }
+}
+
+fn ensureGitLfs(allocator: std.mem.Allocator, cmd: []const u8) !void {
+    const printNoGitLfs = (struct {
+        fn impl() void {
+            std.log.err("\n" ++
+                \\---------------------------------------------------------------------------
+                \\
+                \\Please install Git LFS (Large File Support) extension and run 'zig build' again.
+                \\
+                \\For more info about Git LFS see: https://git-lfs.github.com/
+                \\
+                \\---------------------------------------------------------------------------
+                \\
+            , .{});
+        }
+    }).impl;
+    const argv = &[_][]const u8{ "git", "lfs", cmd };
+    const result = std.process.Child.run(.{
+        .allocator = allocator,
+        .argv = argv,
+    }) catch { // e.g. FileNotFound
+        printNoGitLfs();
+        return error.GitLfsNotFound;
+    };
+    defer {
+        allocator.free(result.stderr);
+        allocator.free(result.stdout);
+    }
+    if (result.term.Exited != 0) {
+        printNoGitLfs();
+        return error.GitLfsNotFound;
+    }
+}
+
+fn checkGitLfsContent() !void {
+    const expected_contents =
+        \\DO NOT EDIT OR DELETE
+        \\This file is used to check if Git LFS content has been downloaded
+    ;
+    var buf: [expected_contents.len]u8 = undefined;
+    _ = std.fs.cwd().readFile(".lfs-content-token", &buf) catch {
+        return error.GitLfsContentTokenNotFound;
+    };
+    if (!std.mem.eql(u8, expected_contents, &buf)) {
+        return error.GitLfsContentCheckFailed;
+    }
 }
