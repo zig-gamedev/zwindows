@@ -1,5 +1,5 @@
 const std = @import("std");
-const windows = @import("windows.zig");
+const windows = @import("../windows.zig");
 const IUnknown = windows.IUnknown;
 const BYTE = windows.BYTE;
 const UINT = windows.UINT;

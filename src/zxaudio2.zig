@@ -5,10 +5,8 @@ const options = @import("options");
 const std = @import("std");
 const assert = std.debug.assert;
 
-const zwindows = @import("zwindows");
-
-const windows = zwindows.windows;
-const IUnknown = zwindows.windows.IUnknown;
+const windows = @import("zwindows");
+const IUnknown = windows.IUnknown;
 const WINAPI = windows.WINAPI;
 const UINT32 = windows.UINT32;
 const DWORD = windows.DWORD;
@@ -17,12 +15,12 @@ const LONGLONG = windows.LONGLONG;
 const ULONG = windows.ULONG;
 const BOOL = windows.BOOL;
 
-const xaudio2 = zwindows.xaudio2;
-const mf = zwindows.mf;
-const xapo = zwindows.xapo;
-const hrPanicOnFail = zwindows.hrPanicOnFail;
+const xaudio2 = windows.xaudio2;
+const mf = windows.mf;
+const xapo = windows.xapo;
+const hrPanicOnFail = windows.hrPanicOnFail;
 
-const wasapi = zwindows.wasapi;
+const wasapi = windows.wasapi;
 const WAVEFORMATEX = wasapi.WAVEFORMATEX;
 
 const optimal_voice_format = WAVEFORMATEX{

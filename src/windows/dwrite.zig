@@ -1,4 +1,4 @@
-const windows = @import("windows.zig");
+const windows = @import("../windows.zig");
 const UINT = windows.UINT;
 const IUnknown = windows.IUnknown;
 const GUID = windows.GUID;

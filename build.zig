@@ -36,7 +36,7 @@ pub fn build(b: *std.Build) !void {
     }
 
     const zwindows_module = b.addModule("zwindows", .{
-        .root_source_file = b.path("src/zwindows.zig"),
+        .root_source_file = b.path("src/windows.zig"),
         .target = target,
         .optimize = optimize,
     });

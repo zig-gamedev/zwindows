@@ -1,21 +1,20 @@
 const std = @import("std");
 const assert = std.debug.assert;
 
-const zwindows = @import("zwindows");
-const windows = zwindows.windows;
-const dwrite = zwindows.dwrite;
-const dxgi = zwindows.dxgi;
-const d3d11 = zwindows.d3d11;
-const d3d12 = zwindows.d3d12;
-const d3d12d = zwindows.d3d12d;
-const d3d = zwindows.d3d;
-const d2d1 = zwindows.d2d1;
-const d3d11on12 = zwindows.d3d11on12;
-const wic = zwindows.wic;
-const HResultError = zwindows.HResultError;
-const hrPanic = zwindows.hrPanic;
-const hrPanicOnFail = zwindows.hrPanicOnFail;
-const hrErrorOnFail = zwindows.hrErrorOnFail;
+const windows = @import("zwindows");
+const dwrite = windows.dwrite;
+const dxgi = windows.dxgi;
+const d3d11 = windows.d3d11;
+const d3d12 = windows.d3d12;
+const d3d12d = windows.d3d12d;
+const d3d = windows.d3d;
+const d2d1 = windows.d2d1;
+const d3d11on12 = windows.d3d11on12;
+const wic = windows.wic;
+const HResultError = windows.HResultError;
+const hrPanic = windows.hrPanic;
+const hrPanicOnFail = windows.hrPanicOnFail;
+const hrErrorOnFail = windows.hrErrorOnFail;
 
 const dds_loader = @import("dds_loader.zig");
 

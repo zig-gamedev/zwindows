@@ -1,4 +1,134 @@
 //! Extends std.os.windows
+//!
+//! TODO: Re-export *all* of std.os.windows and organize better.
+
+const std = @import("std");
+
+pub const WINAPI = std.os.windows.WINAPI;
+pub const S_OK = std.os.windows.S_OK;
+pub const S_FALSE = std.os.windows.S_FALSE;
+pub const E_NOTIMPL = std.os.windows.E_NOTIMPL;
+pub const E_NOINTERFACE = std.os.windows.E_NOINTERFACE;
+pub const E_POINTER = std.os.windows.E_POINTER;
+pub const E_ABORT = std.os.windows.E_ABORT;
+pub const E_FAIL = std.os.windows.E_FAIL;
+pub const E_UNEXPECTED = std.os.windows.E_UNEXPECTED;
+pub const E_ACCESSDENIED = std.os.windows.E_ACCESSDENIED;
+pub const E_HANDLE = std.os.windows.E_HANDLE;
+pub const E_OUTOFMEMORY = std.os.windows.E_OUTOFMEMORY;
+pub const E_INVALIDARG = std.os.windows.E_INVALIDARG;
+pub const GENERIC_READ = std.os.windows.GENERIC_READ;
+pub const GENERIC_WRITE = std.os.windows.GENERIC_WRITE;
+pub const GENERIC_EXECUTE = std.os.windows.GENERIC_EXECUTE;
+pub const GENERIC_ALL = std.os.windows.GENERIC_ALL;
+pub const EVENT_ALL_ACCESS = std.os.windows.EVENT_ALL_ACCESS;
+pub const INFINITE = std.os.windows.INFINITE;
+pub const TRUE = std.os.windows.TRUE;
+pub const FALSE = std.os.windows.FALSE;
+pub const BOOL = std.os.windows.BOOL;
+pub const BOOLEAN = std.os.windows.BOOLEAN;
+pub const BYTE = std.os.windows.BYTE;
+pub const CHAR = std.os.windows.CHAR;
+pub const UCHAR = std.os.windows.UCHAR;
+pub const WCHAR = std.os.windows.WCHAR;
+pub const FLOAT = std.os.windows.FLOAT;
+pub const HCRYPTPROV = std.os.windows.HCRYPTPROV;
+pub const ATOM = std.os.windows.ATOM;
+pub const WPARAM = std.os.windows.WPARAM;
+pub const LPARAM = std.os.windows.LPARAM;
+pub const LRESULT = std.os.windows.LRESULT;
+pub const HRESULT = std.os.windows.HRESULT;
+pub const HBRUSH = std.os.windows.HBRUSH;
+pub const HCURSOR = std.os.windows.HCURSOR;
+pub const HICON = std.os.windows.HICON;
+pub const HINSTANCE = std.os.windows.HINSTANCE;
+pub const HMENU = std.os.windows.HMENU;
+pub const HMODULE = std.os.windows.HMODULE;
+pub const HWND = std.os.windows.HWND;
+pub const HDC = std.os.windows.HDC;
+pub const HGLRC = std.os.windows.HGLRC;
+pub const FARPROC = std.os.windows.FARPROC;
+pub const PROC = std.os.windows.PROC;
+pub const INT = std.os.windows.INT;
+pub const SIZE_T = std.os.windows.SIZE_T;
+pub const UINT = std.os.windows.UINT;
+pub const USHORT = std.os.windows.USHORT;
+pub const SHORT = std.os.windows.SHORT;
+pub const ULONG = std.os.windows.ULONG;
+pub const LONG = std.os.windows.LONG;
+pub const WORD = std.os.windows.WORD;
+pub const DWORD = std.os.windows.DWORD;
+pub const ULONGLONG = std.os.windows.ULONGLONG;
+pub const LONGLONG = std.os.windows.LONGLONG;
+pub const LARGE_INTEGER = std.os.windows.LARGE_INTEGER;
+pub const ULARGE_INTEGER = std.os.windows.ULARGE_INTEGER;
+pub const ULONG_PTR = std.os.windows.ULONG_PTR;
+pub const LONG_PTR = std.os.windows.LONG_PTR;
+pub const DWORD_PTR = std.os.windows.DWORD_PTR;
+pub const DWORD64 = std.os.windows.DWORD64;
+pub const ULONG64 = std.os.windows.ULONG64;
+pub const HLOCAL = std.os.windows.HLOCAL;
+pub const LPCSTR = std.os.windows.LPCSTR;
+pub const LPCVOID = std.os.windows.LPCVOID;
+pub const LPSTR = std.os.windows.LPSTR;
+pub const LPVOID = std.os.windows.LPVOID;
+pub const LPWSTR = std.os.windows.LPWSTR;
+pub const LPCWSTR = std.os.windows.LPCWSTR;
+pub const PVOID = std.os.windows.PVOID;
+pub const PWSTR = std.os.windows.PWSTR;
+pub const PCWSTR = std.os.windows.PCWSTR;
+pub const HANDLE = std.os.windows.HANDLE;
+pub const GUID = std.os.windows.GUID;
+pub const NTSTATUS = std.os.windows.NTSTATUS;
+pub const CRITICAL_SECTION = std.os.windows.CRITICAL_SECTION;
+pub const SECURITY_ATTRIBUTES = std.os.windows.SECURITY_ATTRIBUTES;
+pub const RECT = std.os.windows.RECT;
+pub const POINT = std.os.windows.POINT;
+pub const LANGID = std.os.windows.LANGID;
+pub const MAX_PATH = std.os.windows.MAX_PATH;
+pub const KNOWNFOLDERID = std.os.windows.KNOWNFOLDERID;
+pub const FOLDERID_LocalAppData = std.os.windows.FOLDERID_LocalAppData;
+pub const KF_FLAG_DEFAULT = std.os.windows.KF_FLAG_DEFAULT;
+pub const KF_FLAG_NO_APPCONTAINER_REDIRECTION = std.os.windows.KF_FLAG_NO_APPCONTAINER_REDIRECTION;
+pub const KF_FLAG_CREATE = std.os.windows.KF_FLAG_CREATE;
+pub const KF_FLAG_DONT_VERIFY = std.os.windows.KF_FLAG_DONT_VERIFY;
+pub const KF_FLAG_DONT_UNEXPAND = std.os.windows.KF_FLAG_DONT_UNEXPAND;
+pub const KF_FLAG_NO_ALIAS = std.os.windows.KF_FLAG_NO_ALIAS;
+pub const KF_FLAG_INIT = std.os.windows.KF_FLAG_INIT;
+pub const KF_FLAG_DEFAULT_PATH = std.os.windows.KF_FLAG_DEFAULT_PATH;
+pub const KF_FLAG_NOT_PARENT_RELATIVE = std.os.windows.KF_FLAG_NOT_PARENT_RELATIVE;
+pub const KF_FLAG_SIMPLE_IDLIST = std.os.windows.KF_FLAG_SIMPLE_IDLIST;
+pub const KF_FLAG_ALIAS_ONLY = std.os.windows.KF_FLAG_ALIAS_ONLY;
+pub const PTHREAD_START_ROUTINE = std.os.windows.PTHREAD_START_ROUTINE;
+pub const LPTHREAD_START_ROUTINE = std.os.windows.LPTHREAD_START_ROUTINE;
+pub const OSVERSIONINFOW = std.os.windows.OSVERSIONINFOW;
+pub const CloseHandle = std.os.windows.CloseHandle;
+pub const FindClose = std.os.windows.FindClose;
+pub const FreeLibrary = std.os.windows.FreeLibrary;
+pub const WaitForSingleObject = std.os.windows.WaitForSingleObject;
+pub const WaitForSingleObjectEx = std.os.windows.WaitForSingleObjectEx;
+pub const WaitForMultipleObjectsEx = std.os.windows.WaitForMultipleObjectsEx;
+
+pub const dwrite = @import("windows/dwrite.zig");
+pub const dxgi = @import("windows/dxgi.zig");
+pub const d3d11 = @import("windows/d3d11.zig");
+pub const d3d11d = @import("windows/d3d11sdklayers.zig");
+pub const d3d12 = @import("windows/d3d12.zig");
+pub const d3d12d = @import("windows/d3d12sdklayers.zig");
+pub const d3d = @import("windows/d3dcommon.zig");
+pub const d2d1 = @import("windows/d2d1.zig");
+pub const d3d11on12 = @import("windows/d3d11on12.zig");
+pub const wic = @import("windows/wincodec.zig");
+pub const wasapi = @import("windows/wasapi.zig");
+pub const directml = @import("windows/directml.zig");
+pub const mf = @import("windows/mf.zig");
+pub const xaudio2 = @import("windows/xaudio2.zig");
+pub const xaudio2fx = @import("windows/xaudio2fx.zig");
+pub const xapo = @import("windows/xapo.zig");
+pub const xinput = @import("windows/xinput.zig");
+pub const d3dcompiler = @import("windows/d3dcompiler.zig");
+
+pub const FOLDERID_ProgramFiles = GUID.parse("{905e63b6-c1bf-494e-b29c-65b732d3d21a}");
 
 pub const E_FILE_NOT_FOUND = @as(HRESULT, @bitCast(@as(c_ulong, 0x80070002)));
 
@@ -578,105 +708,202 @@ pub extern "Opengl32" fn wglMakeCurrent(
 
 pub extern "Opengl32" fn wglGetProcAddress(unnamedParam1: LPCSTR) callconv(WINAPI) ?PROC;
 
-// Reexport std.os.windows
-const std = @import("std");
-pub usingnamespace std.os.windows;
-const WINAPI = std.os.windows.WINAPI;
-const S_OK = std.os.windows.S_OK;
-const S_FALSE = std.os.windows.S_FALSE;
-const E_NOTIMPL = std.os.windows.E_NOTIMPL;
-const E_NOINTERFACE = std.os.windows.E_NOINTERFACE;
-const E_POINTER = std.os.windows.E_POINTER;
-const E_ABORT = std.os.windows.E_ABORT;
-const E_FAIL = std.os.windows.E_FAIL;
-const E_UNEXPECTED = std.os.windows.E_UNEXPECTED;
-const E_ACCESSDENIED = std.os.windows.E_ACCESSDENIED;
-const E_HANDLE = std.os.windows.E_HANDLE;
-const E_OUTOFMEMORY = std.os.windows.E_OUTOFMEMORY;
-const E_INVALIDARG = std.os.windows.E_INVALIDARG;
-const GENERIC_READ = std.os.windows.GENERIC_READ;
-const GENERIC_WRITE = std.os.windows.GENERIC_WRITE;
-const GENERIC_EXECUTE = std.os.windows.GENERIC_EXECUTE;
-const GENERIC_ALL = std.os.windows.GENERIC_ALL;
-const EVENT_ALL_ACCESS = std.os.windows.EVENT_ALL_ACCESS;
-const TRUE = std.os.windows.TRUE;
-const FALSE = std.os.windows.FALSE;
-const BOOL = std.os.windows.BOOL;
-const BOOLEAN = std.os.windows.BOOLEAN;
-const BYTE = std.os.windows.BYTE;
-const CHAR = std.os.windows.CHAR;
-const UCHAR = std.os.windows.UCHAR;
-const WCHAR = std.os.windows.WCHAR;
-const FLOAT = std.os.windows.FLOAT;
-const HCRYPTPROV = std.os.windows.HCRYPTPROV;
-const ATOM = std.os.windows.ATOM;
-const WPARAM = std.os.windows.WPARAM;
-const LPARAM = std.os.windows.LPARAM;
-const LRESULT = std.os.windows.LRESULT;
-const HRESULT = std.os.windows.HRESULT;
-const HBRUSH = std.os.windows.HBRUSH;
-const HCURSOR = std.os.windows.HCURSOR;
-const HICON = std.os.windows.HICON;
-const HINSTANCE = std.os.windows.HINSTANCE;
-const HMENU = std.os.windows.HMENU;
-const HMODULE = std.os.windows.HMODULE;
-const HWND = std.os.windows.HWND;
-const HDC = std.os.windows.HDC;
-const HGLRC = std.os.windows.HGLRC;
-const FARPROC = std.os.windows.FARPROC;
-const PROC = std.os.windows.PROC;
-const INT = std.os.windows.INT;
-const SIZE_T = std.os.windows.SIZE_T;
-const UINT = std.os.windows.UINT;
-const USHORT = std.os.windows.USHORT;
-const SHORT = std.os.windows.SHORT;
-const ULONG = std.os.windows.ULONG;
-const LONG = std.os.windows.LONG;
-const WORD = std.os.windows.WORD;
-const DWORD = std.os.windows.DWORD;
-const ULONGLONG = std.os.windows.ULONGLONG;
-const LONGLONG = std.os.windows.LONGLONG;
-const LARGE_INTEGER = std.os.windows.LARGE_INTEGER;
-const ULARGE_INTEGER = std.os.windows.ULARGE_INTEGER;
-const ULONG_PTR = std.os.windows.ULONG_PTR;
-const LONG_PTR = std.os.windows.LONG_PTR;
-const DWORD_PTR = std.os.windows.DWORD_PTR;
-const DWORD64 = std.os.windows.DWORD64;
-const ULONG64 = std.os.windows.ULONG64;
-const HLOCAL = std.os.windows.HLOCAL;
-const LPCSTR = std.os.windows.LPCSTR;
-const LPCVOID = std.os.windows.LPCVOID;
-const LPSTR = std.os.windows.LPSTR;
-const LPVOID = std.os.windows.LPVOID;
-const LPWSTR = std.os.windows.LPWSTR;
-const LPCWSTR = std.os.windows.LPCWSTR;
-const PVOID = std.os.windows.PVOID;
-const PWSTR = std.os.windows.PWSTR;
-const PCWSTR = std.os.windows.PCWSTR;
-const HANDLE = std.os.windows.HANDLE;
-const GUID = std.os.windows.GUID;
-const NTSTATUS = std.os.windows.NTSTATUS;
-const CRITICAL_SECTION = std.os.windows.CRITICAL_SECTION;
-const SECURITY_ATTRIBUTES = std.os.windows.SECURITY_ATTRIBUTES;
-const RECT = std.os.windows.RECT;
-const POINT = std.os.windows.POINT;
-const LANGID = std.os.windows.LANGID;
-const MAX_PATH = std.os.windows.MAX_PATH;
-const KNOWNFOLDERID = std.os.windows.KNOWNFOLDERID;
-const FOLDERID_LocalAppData = std.os.windows.FOLDERID_LocalAppData;
-const FOLDERID_ProgramFiles = std.os.windows.FOLDERID_ProgramFiles;
-const KF_FLAG_DEFAULT = std.os.windows.KF_FLAG_DEFAULT;
-const KF_FLAG_NO_APPCONTAINER_REDIRECTION = std.os.windows.KF_FLAG_NO_APPCONTAINER_REDIRECTION;
-const KF_FLAG_CREATE = std.os.windows.KF_FLAG_CREATE;
-const KF_FLAG_DONT_VERIFY = std.os.windows.KF_FLAG_DONT_VERIFY;
-const KF_FLAG_DONT_UNEXPAND = std.os.windows.KF_FLAG_DONT_UNEXPAND;
-const KF_FLAG_NO_ALIAS = std.os.windows.KF_FLAG_NO_ALIAS;
-const KF_FLAG_INIT = std.os.windows.KF_FLAG_INIT;
-const KF_FLAG_DEFAULT_PATH = std.os.windows.KF_FLAG_DEFAULT_PATH;
-const KF_FLAG_NOT_PARENT_RELATIVE = std.os.windows.KF_FLAG_NOT_PARENT_RELATIVE;
-const KF_FLAG_SIMPLE_IDLIST = std.os.windows.KF_FLAG_SIMPLE_IDLIST;
-const KF_FLAG_ALIAS_ONLY = std.os.windows.KF_FLAG_ALIAS_ONLY;
-const PTHREAD_START_ROUTINE = std.os.windows.PTHREAD_START_ROUTINE;
-const LPTHREAD_START_ROUTINE = std.os.windows.LPTHREAD_START_ROUTINE;
-const OSVERSIONINFOW = std.os.windows.OSVERSIONINFOW;
-const FreeLibrary = std.os.windows.FreeLibrary;
+/// https://docs.microsoft.com/en-us/windows/win32/com/com-error-codes-10
+///
+/// [DEPRECATED]: Use proc specific errors as in std.os.windows
+pub const HResultError =
+    MiscError || Error || dxgi.Error || d3d12.Error || d3d11.Error ||
+    wasapi.Error || dwrite.Error || xapo.Error || xinput.Error;
+
+pub fn hrPanic(err: HResultError) noreturn {
+    std.debug.panic(
+        "HRESULT error detected (0x{x}, {}).",
+        .{ @as(c_ulong, @bitCast(errorToHRESULT(err))), err },
+    );
+}
+
+pub inline fn hrPanicOnFail(hr: HRESULT) void {
+    if (hr != S_OK) {
+        hrPanic(hrToError(hr));
+    }
+}
+
+/// [DEPRECATED]: Use proc specific errors as in std.os.windows
+pub inline fn hrErrorOnFail(hr: HRESULT) HResultError!void {
+    if (hr != S_OK) {
+        return hrToError(hr);
+    }
+}
+
+/// [DEPRECATED]: Use proc specific errors as in std.os.windows
+pub fn hrToError(hr: HRESULT) HResultError {
+    std.debug.assert(hr != S_OK);
+    return switch (hr) {
+        //
+        E_UNEXPECTED => Error.UNEXPECTED,
+        E_NOTIMPL => Error.NOTIMPL,
+        E_OUTOFMEMORY => Error.OUTOFMEMORY,
+        E_INVALIDARG => Error.INVALIDARG,
+        E_POINTER => Error.POINTER,
+        E_HANDLE => Error.HANDLE,
+        E_ABORT => Error.ABORT,
+        E_FAIL => Error.FAIL,
+        E_ACCESSDENIED => Error.ACCESSDENIED,
+        //
+        dxgi.ERROR_ACCESS_DENIED => dxgi.Error.ACCESS_DENIED,
+        dxgi.ERROR_ACCESS_LOST => dxgi.Error.ACCESS_LOST,
+        dxgi.ERROR_ALREADY_EXISTS => dxgi.Error.ALREADY_EXISTS,
+        dxgi.ERROR_CANNOT_PROTECT_CONTENT => dxgi.Error.CANNOT_PROTECT_CONTENT,
+        dxgi.ERROR_DEVICE_HUNG => dxgi.Error.DEVICE_HUNG,
+        dxgi.ERROR_DEVICE_REMOVED => dxgi.Error.DEVICE_REMOVED,
+        dxgi.ERROR_DEVICE_RESET => dxgi.Error.DEVICE_RESET,
+        dxgi.ERROR_DRIVER_INTERNAL_ERROR => dxgi.Error.DRIVER_INTERNAL_ERROR,
+        dxgi.ERROR_FRAME_STATISTICS_DISJOINT => dxgi.Error.FRAME_STATISTICS_DISJOINT,
+        dxgi.ERROR_GRAPHICS_VIDPN_SOURCE_IN_USE => dxgi.Error.GRAPHICS_VIDPN_SOURCE_IN_USE,
+        dxgi.ERROR_INVALID_CALL => dxgi.Error.INVALID_CALL,
+        dxgi.ERROR_MORE_DATA => dxgi.Error.MORE_DATA,
+        dxgi.ERROR_NAME_ALREADY_EXISTS => dxgi.Error.NAME_ALREADY_EXISTS,
+        dxgi.ERROR_NONEXCLUSIVE => dxgi.Error.NONEXCLUSIVE,
+        dxgi.ERROR_NOT_CURRENTLY_AVAILABLE => dxgi.Error.NOT_CURRENTLY_AVAILABLE,
+        dxgi.ERROR_NOT_FOUND => dxgi.Error.NOT_FOUND,
+        dxgi.ERROR_REMOTE_CLIENT_DISCONNECTED => dxgi.Error.REMOTE_CLIENT_DISCONNECTED,
+        dxgi.ERROR_REMOTE_OUTOFMEMORY => dxgi.Error.REMOTE_OUTOFMEMORY,
+        dxgi.ERROR_RESTRICT_TO_OUTPUT_STALE => dxgi.Error.RESTRICT_TO_OUTPUT_STALE,
+        dxgi.ERROR_SDK_COMPONENT_MISSING => dxgi.Error.SDK_COMPONENT_MISSING,
+        dxgi.ERROR_SESSION_DISCONNECTED => dxgi.Error.SESSION_DISCONNECTED,
+        dxgi.ERROR_UNSUPPORTED => dxgi.Error.UNSUPPORTED,
+        dxgi.ERROR_WAIT_TIMEOUT => dxgi.Error.WAIT_TIMEOUT,
+        dxgi.ERROR_WAS_STILL_DRAWING => dxgi.Error.WAS_STILL_DRAWING,
+        //
+        d3d12.ERROR_ADAPTER_NOT_FOUND => d3d12.Error.ADAPTER_NOT_FOUND,
+        d3d12.ERROR_DRIVER_VERSION_MISMATCH => d3d12.Error.DRIVER_VERSION_MISMATCH,
+        //
+        d3d11.ERROR_FILE_NOT_FOUND => d3d11.Error.FILE_NOT_FOUND,
+        d3d11.ERROR_TOO_MANY_UNIQUE_STATE_OBJECTS => d3d11.Error.TOO_MANY_UNIQUE_STATE_OBJECTS,
+        d3d11.ERROR_TOO_MANY_UNIQUE_VIEW_OBJECTS => d3d11.Error.TOO_MANY_UNIQUE_VIEW_OBJECTS,
+        d3d11.ERROR_DEFERRED_CONTEXT_MAP_WITHOUT_INITIAL_DISCARD => d3d11.Error.DEFERRED_CONTEXT_MAP_WITHOUT_INITIAL_DISCARD,
+        //
+        wasapi.AUDCLNT_E_NOT_INITIALIZED => wasapi.Error.NOT_INITIALIZED,
+        wasapi.AUDCLNT_E_ALREADY_INITIALIZED => wasapi.Error.ALREADY_INITIALIZED,
+        wasapi.AUDCLNT_E_WRONG_ENDPOINT_TYPE => wasapi.Error.WRONG_ENDPOINT_TYPE,
+        wasapi.AUDCLNT_E_DEVICE_INVALIDATED => wasapi.Error.DEVICE_INVALIDATED,
+        wasapi.AUDCLNT_E_NOT_STOPPED => wasapi.Error.NOT_STOPPED,
+        wasapi.AUDCLNT_E_BUFFER_TOO_LARGE => wasapi.Error.BUFFER_TOO_LARGE,
+        wasapi.AUDCLNT_E_OUT_OF_ORDER => wasapi.Error.OUT_OF_ORDER,
+        wasapi.AUDCLNT_E_UNSUPPORTED_FORMAT => wasapi.Error.UNSUPPORTED_FORMAT,
+        wasapi.AUDCLNT_E_INVALID_SIZE => wasapi.Error.INVALID_SIZE,
+        wasapi.AUDCLNT_E_DEVICE_IN_USE => wasapi.Error.DEVICE_IN_USE,
+        wasapi.AUDCLNT_E_BUFFER_OPERATION_PENDING => wasapi.Error.BUFFER_OPERATION_PENDING,
+        wasapi.AUDCLNT_E_THREAD_NOT_REGISTERED => wasapi.Error.THREAD_NOT_REGISTERED,
+        wasapi.AUDCLNT_E_EXCLUSIVE_MODE_NOT_ALLOWED => wasapi.Error.EXCLUSIVE_MODE_NOT_ALLOWED,
+        wasapi.AUDCLNT_E_ENDPOINT_CREATE_FAILED => wasapi.Error.ENDPOINT_CREATE_FAILED,
+        wasapi.AUDCLNT_E_SERVICE_NOT_RUNNING => wasapi.Error.SERVICE_NOT_RUNNING,
+        wasapi.AUDCLNT_E_EVENTHANDLE_NOT_EXPECTED => wasapi.Error.EVENTHANDLE_NOT_EXPECTED,
+        wasapi.AUDCLNT_E_EXCLUSIVE_MODE_ONLY => wasapi.Error.EXCLUSIVE_MODE_ONLY,
+        wasapi.AUDCLNT_E_BUFDURATION_PERIOD_NOT_EQUAL => wasapi.Error.BUFDURATION_PERIOD_NOT_EQUAL,
+        wasapi.AUDCLNT_E_EVENTHANDLE_NOT_SET => wasapi.Error.EVENTHANDLE_NOT_SET,
+        wasapi.AUDCLNT_E_INCORRECT_BUFFER_SIZE => wasapi.Error.INCORRECT_BUFFER_SIZE,
+        wasapi.AUDCLNT_E_BUFFER_SIZE_ERROR => wasapi.Error.BUFFER_SIZE_ERROR,
+        wasapi.AUDCLNT_E_CPUUSAGE_EXCEEDED => wasapi.Error.CPUUSAGE_EXCEEDED,
+        wasapi.AUDCLNT_E_BUFFER_ERROR => wasapi.Error.BUFFER_ERROR,
+        wasapi.AUDCLNT_E_BUFFER_SIZE_NOT_ALIGNED => wasapi.Error.BUFFER_SIZE_NOT_ALIGNED,
+        wasapi.AUDCLNT_E_INVALID_DEVICE_PERIOD => wasapi.Error.INVALID_DEVICE_PERIOD,
+        //
+        dwrite.E_FILEFORMAT => dwrite.Error.E_FILEFORMAT,
+        //
+        xapo.E_FORMAT_UNSUPPORTED => xapo.Error.E_FORMAT_UNSUPPORTED,
+        //
+        xinput.ERROR_EMPTY => xinput.Error.EMPTY,
+        xinput.ERROR_DEVICE_NOT_CONNECTED => xinput.Error.DEVICE_NOT_CONNECTED,
+        //
+        E_FILE_NOT_FOUND => MiscError.E_FILE_NOT_FOUND,
+        S_FALSE => MiscError.S_FALSE,
+        // treat unknown error return codes as E_FAIL
+        else => blk: {
+            std.log.debug("HRESULT error 0x{x} not recognized treating as E_FAIL.", .{@as(c_ulong, @bitCast(hr))});
+            break :blk Error.FAIL;
+        },
+    };
+}
+
+pub fn errorToHRESULT(err: HResultError) HRESULT {
+    return switch (err) {
+        Error.UNEXPECTED => E_UNEXPECTED,
+        Error.NOTIMPL => E_NOTIMPL,
+        Error.OUTOFMEMORY => E_OUTOFMEMORY,
+        Error.INVALIDARG => E_INVALIDARG,
+        Error.POINTER => E_POINTER,
+        Error.HANDLE => E_HANDLE,
+        Error.ABORT => E_ABORT,
+        Error.FAIL => E_FAIL,
+        Error.ACCESSDENIED => E_ACCESSDENIED,
+        //
+        dxgi.Error.ACCESS_DENIED => dxgi.ERROR_ACCESS_DENIED,
+        dxgi.Error.ACCESS_LOST => dxgi.ERROR_ACCESS_LOST,
+        dxgi.Error.ALREADY_EXISTS => dxgi.ERROR_ALREADY_EXISTS,
+        dxgi.Error.CANNOT_PROTECT_CONTENT => dxgi.ERROR_CANNOT_PROTECT_CONTENT,
+        dxgi.Error.DEVICE_HUNG => dxgi.ERROR_DEVICE_HUNG,
+        dxgi.Error.DEVICE_REMOVED => dxgi.ERROR_DEVICE_REMOVED,
+        dxgi.Error.DEVICE_RESET => dxgi.ERROR_DEVICE_RESET,
+        dxgi.Error.DRIVER_INTERNAL_ERROR => dxgi.ERROR_DRIVER_INTERNAL_ERROR,
+        dxgi.Error.FRAME_STATISTICS_DISJOINT => dxgi.ERROR_FRAME_STATISTICS_DISJOINT,
+        dxgi.Error.GRAPHICS_VIDPN_SOURCE_IN_USE => dxgi.ERROR_GRAPHICS_VIDPN_SOURCE_IN_USE,
+        dxgi.Error.INVALID_CALL => dxgi.ERROR_INVALID_CALL,
+        dxgi.Error.MORE_DATA => dxgi.ERROR_MORE_DATA,
+        dxgi.Error.NAME_ALREADY_EXISTS => dxgi.ERROR_NAME_ALREADY_EXISTS,
+        dxgi.Error.NONEXCLUSIVE => dxgi.ERROR_NONEXCLUSIVE,
+        dxgi.Error.NOT_CURRENTLY_AVAILABLE => dxgi.ERROR_NOT_CURRENTLY_AVAILABLE,
+        dxgi.Error.NOT_FOUND => dxgi.ERROR_NOT_FOUND,
+        dxgi.Error.REMOTE_CLIENT_DISCONNECTED => dxgi.ERROR_REMOTE_CLIENT_DISCONNECTED,
+        dxgi.Error.REMOTE_OUTOFMEMORY => dxgi.ERROR_REMOTE_OUTOFMEMORY,
+        dxgi.Error.RESTRICT_TO_OUTPUT_STALE => dxgi.ERROR_RESTRICT_TO_OUTPUT_STALE,
+        dxgi.Error.SDK_COMPONENT_MISSING => dxgi.ERROR_SDK_COMPONENT_MISSING,
+        dxgi.Error.SESSION_DISCONNECTED => dxgi.ERROR_SESSION_DISCONNECTED,
+        dxgi.Error.UNSUPPORTED => dxgi.ERROR_UNSUPPORTED,
+        dxgi.Error.WAIT_TIMEOUT => dxgi.ERROR_WAIT_TIMEOUT,
+        dxgi.Error.WAS_STILL_DRAWING => dxgi.ERROR_WAS_STILL_DRAWING,
+        //
+        d3d12.Error.ADAPTER_NOT_FOUND => d3d12.ERROR_ADAPTER_NOT_FOUND,
+        d3d12.Error.DRIVER_VERSION_MISMATCH => d3d12.ERROR_DRIVER_VERSION_MISMATCH,
+        d3d11.Error.FILE_NOT_FOUND => d3d11.ERROR_FILE_NOT_FOUND,
+        d3d11.Error.TOO_MANY_UNIQUE_STATE_OBJECTS => d3d11.ERROR_TOO_MANY_UNIQUE_STATE_OBJECTS,
+        d3d11.Error.TOO_MANY_UNIQUE_VIEW_OBJECTS => d3d11.ERROR_TOO_MANY_UNIQUE_VIEW_OBJECTS,
+        d3d11.Error.DEFERRED_CONTEXT_MAP_WITHOUT_INITIAL_DISCARD => d3d11.ERROR_DEFERRED_CONTEXT_MAP_WITHOUT_INITIAL_DISCARD,
+        //
+        wasapi.Error.NOT_INITIALIZED => wasapi.AUDCLNT_E_NOT_INITIALIZED,
+        wasapi.Error.ALREADY_INITIALIZED => wasapi.AUDCLNT_E_ALREADY_INITIALIZED,
+        wasapi.Error.WRONG_ENDPOINT_TYPE => wasapi.AUDCLNT_E_WRONG_ENDPOINT_TYPE,
+        wasapi.Error.DEVICE_INVALIDATED => wasapi.AUDCLNT_E_DEVICE_INVALIDATED,
+        wasapi.Error.NOT_STOPPED => wasapi.AUDCLNT_E_NOT_STOPPED,
+        wasapi.Error.BUFFER_TOO_LARGE => wasapi.AUDCLNT_E_BUFFER_TOO_LARGE,
+        wasapi.Error.OUT_OF_ORDER => wasapi.AUDCLNT_E_OUT_OF_ORDER,
+        wasapi.Error.UNSUPPORTED_FORMAT => wasapi.AUDCLNT_E_UNSUPPORTED_FORMAT,
+        wasapi.Error.INVALID_SIZE => wasapi.AUDCLNT_E_INVALID_SIZE,
+        wasapi.Error.DEVICE_IN_USE => wasapi.AUDCLNT_E_DEVICE_IN_USE,
+        wasapi.Error.BUFFER_OPERATION_PENDING => wasapi.AUDCLNT_E_BUFFER_OPERATION_PENDING,
+        wasapi.Error.THREAD_NOT_REGISTERED => wasapi.AUDCLNT_E_THREAD_NOT_REGISTERED,
+        wasapi.Error.EXCLUSIVE_MODE_NOT_ALLOWED => wasapi.AUDCLNT_E_EXCLUSIVE_MODE_NOT_ALLOWED,
+        wasapi.Error.ENDPOINT_CREATE_FAILED => wasapi.AUDCLNT_E_ENDPOINT_CREATE_FAILED,
+        wasapi.Error.SERVICE_NOT_RUNNING => wasapi.AUDCLNT_E_SERVICE_NOT_RUNNING,
+        wasapi.Error.EVENTHANDLE_NOT_EXPECTED => wasapi.AUDCLNT_E_EVENTHANDLE_NOT_EXPECTED,
+        wasapi.Error.EXCLUSIVE_MODE_ONLY => wasapi.AUDCLNT_E_EXCLUSIVE_MODE_ONLY,
+        wasapi.Error.BUFDURATION_PERIOD_NOT_EQUAL => wasapi.AUDCLNT_E_BUFDURATION_PERIOD_NOT_EQUAL,
+        wasapi.Error.EVENTHANDLE_NOT_SET => wasapi.AUDCLNT_E_EVENTHANDLE_NOT_SET,
+        wasapi.Error.INCORRECT_BUFFER_SIZE => wasapi.AUDCLNT_E_INCORRECT_BUFFER_SIZE,
+        wasapi.Error.BUFFER_SIZE_ERROR => wasapi.AUDCLNT_E_BUFFER_SIZE_ERROR,
+        wasapi.Error.CPUUSAGE_EXCEEDED => wasapi.AUDCLNT_E_CPUUSAGE_EXCEEDED,
+        wasapi.Error.BUFFER_ERROR => wasapi.AUDCLNT_E_BUFFER_ERROR,
+        wasapi.Error.BUFFER_SIZE_NOT_ALIGNED => wasapi.AUDCLNT_E_BUFFER_SIZE_NOT_ALIGNED,
+        wasapi.Error.INVALID_DEVICE_PERIOD => wasapi.AUDCLNT_E_INVALID_DEVICE_PERIOD,
+        //
+        dwrite.Error.E_FILEFORMAT => dwrite.E_FILEFORMAT,
+        //
+        xapo.Error.E_FORMAT_UNSUPPORTED => xapo.E_FORMAT_UNSUPPORTED,
+        //
+        xinput.Error.EMPTY => xinput.ERROR_EMPTY,
+        xinput.Error.DEVICE_NOT_CONNECTED => xinput.ERROR_DEVICE_NOT_CONNECTED,
+        //
+        MiscError.E_FILE_NOT_FOUND => E_FILE_NOT_FOUND,
+        MiscError.S_FALSE => S_FALSE,
+    };
+}

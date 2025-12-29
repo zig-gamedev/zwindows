@@ -1,5 +1,5 @@
 const std = @import("std");
-const windows = @import("windows.zig");
+const windows = @import("../windows.zig");
 const BYTE = windows.BYTE;
 const WCHAR = windows.WCHAR;
 const SHORT = windows.SHORT;

@@ -3,10 +3,9 @@
 const std = @import("std");
 const assert = std.debug.assert;
 
-const zwindows = @import("zwindows");
-const windows = zwindows.windows;
-const dxgi = zwindows.dxgi;
-const d3d12 = zwindows.d3d12;
+const windows = @import("zwindows");
+const dxgi = windows.dxgi;
+const d3d12 = windows.d3d12;
 
 const DDS_HEADER_FLAGS_TEXTURE: u32 = 0x00001007; // DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT
 const DDS_HEADER_FLAGS_MIPMAP: u32 = 0x00020000; // DDSD_MIPMAPCOUNT

@@ -1,4 +1,4 @@
-const windows = @import("windows.zig");
+const windows = @import("../windows.zig");
 const BYTE = windows.BYTE;
 const UINT = windows.UINT;
 const UINT32 = windows.UINT32;

@@ -1,6 +1,7 @@
 const std = @import("std");
 const assert = std.debug.assert;
-const windows = @import("windows.zig");
+
+const windows = @import("../windows.zig");
 const BYTE = windows.BYTE;
 const HRESULT = windows.HRESULT;
 const WINAPI = windows.WINAPI;
@@ -11,6 +12,7 @@ const WCHAR = windows.WCHAR;
 const GUID = windows.GUID;
 const ULONG = windows.ULONG;
 const IUnknown = windows.IUnknown;
+
 const wasapi = @import("wasapi.zig");
 const WAVEFORMATEX = wasapi.WAVEFORMATEX;
 

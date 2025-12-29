@@ -55,13 +55,12 @@ pub fn build(b: *std.Build) !void {
 
 ### Bindings Usage Example
 ```zig
-const zwindows = @import("zwindows");
-const windows = zwindows.windows;
-const dwrite = zwindows.dwrite;
-const dxgi = zwindows.dxgi;
-const d3d12 = zwindows.d3d12;
-const d3d12d = zwindows.d3d12d;
-const dml = zwindows.directml;
+const windows = @import("zwindows");
+const dwrite = windows.dwrite;
+const dxgi = windows.dxgi;
+const d3d12 = windows.d3d12;
+const d3d12d = windows.d3d12d;
+const dml = windows.directml;
 // etc
 
 pub fn main() !void {

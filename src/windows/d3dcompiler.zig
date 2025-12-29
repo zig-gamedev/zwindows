@@ -1,9 +1,9 @@
-const std = @import("std");
-const WINAPI = std.os.windows.WINAPI;
-const HRESULT = std.os.windows.HRESULT;
-const LPCSTR = std.os.windows.LPCSTR;
-const UINT = std.os.windows.UINT;
-const SIZE_T = std.os.windows.SIZE_T;
+const windows = @import("../windows.zig");
+const WINAPI = windows.WINAPI;
+const HRESULT = windows.HRESULT;
+const LPCSTR = windows.LPCSTR;
+const UINT = windows.UINT;
+const SIZE_T = windows.SIZE_T;
 
 const d3dcommon = @import("d3dcommon.zig");
 
