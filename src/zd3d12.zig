@@ -1224,16 +1224,16 @@ pub const GraphicsContext = struct {
         const hash = compute_hash: {
             var hasher = std.hash.Adler32.init();
             hasher.update(
-                @as([*]const u8, @ptrCast(pso_desc.VS.pShaderBytecode.?))[0..pso_desc.VS.BytecodeLength],
+                @as([*]const u8, @ptrCast(pso_desc.VS.pShaderBytecode.?))[0..@intCast(pso_desc.VS.BytecodeLength)],
             );
             if (pso_desc.GS.pShaderBytecode != null) {
                 hasher.update(
-                    @as([*]const u8, @ptrCast(pso_desc.GS.pShaderBytecode.?))[0..pso_desc.GS.BytecodeLength],
+                    @as([*]const u8, @ptrCast(pso_desc.GS.pShaderBytecode.?))[0..@intCast(pso_desc.GS.BytecodeLength)],
                 );
             }
             if (pso_desc.PS.pShaderBytecode != null) {
                 hasher.update(
-                    @as([*]const u8, @ptrCast(pso_desc.PS.pShaderBytecode.?))[0..pso_desc.PS.BytecodeLength],
+                    @as([*]const u8, @ptrCast(pso_desc.PS.pShaderBytecode.?))[0..@intCast(pso_desc.PS.BytecodeLength)],
                 );
             }
             hasher.update(std.mem.asBytes(&pso_desc.BlendState));
@@ -1304,15 +1304,15 @@ pub const GraphicsContext = struct {
         const hash = compute_hash: {
             var hasher = std.hash.Adler32.init();
             hasher.update(
-                @as([*]const u8, @ptrCast(pso_desc.MS.pShaderBytecode.?))[0..pso_desc.MS.BytecodeLength],
+                @as([*]const u8, @ptrCast(pso_desc.MS.pShaderBytecode.?))[0..@intCast(pso_desc.MS.BytecodeLength)],
             );
             if (pso_desc.AS.pShaderBytecode != null) {
                 hasher.update(
-                    @as([*]const u8, @ptrCast(pso_desc.AS.pShaderBytecode.?))[0..pso_desc.AS.BytecodeLength],
+                    @as([*]const u8, @ptrCast(pso_desc.AS.pShaderBytecode.?))[0..@intCast(pso_desc.AS.BytecodeLength)],
                 );
             }
             hasher.update(
-                @as([*]const u8, @ptrCast(pso_desc.PS.pShaderBytecode.?))[0..pso_desc.PS.BytecodeLength],
+                @as([*]const u8, @ptrCast(pso_desc.PS.pShaderBytecode.?))[0..@intCast(pso_desc.PS.BytecodeLength)],
             );
             hasher.update(std.mem.asBytes(&pso_desc.BlendState));
             hasher.update(std.mem.asBytes(&pso_desc.SampleMask));
@@ -1370,7 +1370,7 @@ pub const GraphicsContext = struct {
         const hash = compute_hash: {
             var hasher = std.hash.Adler32.init();
             hasher.update(
-                @as([*]const u8, @ptrCast(pso_desc.CS.pShaderBytecode.?))[0..pso_desc.CS.BytecodeLength],
+                @as([*]const u8, @ptrCast(pso_desc.CS.pShaderBytecode.?))[0..@intCast(pso_desc.CS.BytecodeLength)],
             );
             break :compute_hash hasher.final();
         };
@@ -1871,10 +1871,10 @@ pub const GraphicsContext = struct {
             var cpu_slice_as_bytes = std.mem.sliceAsBytes(upload.cpu_slice);
             const subresource_slice = subresource.pData.?;
             while (row < num_rows[0]) : (row += 1) {
-                const cpu_slice_begin = layout[0].Footprint.RowPitch * row;
-                const cpu_slice_end = cpu_slice_begin + row_size_in_bytes_fixed;
-                const subresource_slice_begin = row_size_in_bytes[0] * row;
-                const subresource_slice_end = subresource_slice_begin + row_size_in_bytes_fixed;
+                const cpu_slice_begin: usize = @intCast(layout[0].Footprint.RowPitch * row);
+                const cpu_slice_end: usize = @intCast(cpu_slice_begin + row_size_in_bytes_fixed);
+                const subresource_slice_begin: usize = @intCast(row_size_in_bytes[0] * row);
+                const subresource_slice_end: usize = @intCast(subresource_slice_begin + row_size_in_bytes_fixed);
                 @memcpy(
                     cpu_slice_as_bytes[cpu_slice_begin..cpu_slice_end],
                     subresource_slice[subresource_slice_begin..subresource_slice_end],
