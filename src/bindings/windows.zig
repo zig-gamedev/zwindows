@@ -1,83 +1,5 @@
 //! Extends std.os.windows
 
-const std = @import("std");
-
-pub usingnamespace std.os.windows;
-
-const WINAPI = std.os.windows.WINAPI;
-const S_OK = std.os.windows.S_OK;
-const S_FALSE = std.os.windows.S_FALSE;
-const E_NOTIMPL = std.os.windows.E_NOTIMPL;
-const E_NOINTERFACE = std.os.windows.E_NOINTERFACE;
-const E_POINTER = std.os.windows.E_POINTER;
-const E_ABORT = std.os.windows.E_ABORT;
-const E_FAIL = std.os.windows.E_FAIL;
-const E_UNEXPECTED = std.os.windows.E_UNEXPECTED;
-const E_ACCESSDENIED = std.os.windows.E_ACCESSDENIED;
-const E_HANDLE = std.os.windows.E_HANDLE;
-const E_OUTOFMEMORY = std.os.windows.E_OUTOFMEMORY;
-const E_INVALIDARG = std.os.windows.E_INVALIDARG;
-const GENERIC_READ = std.os.windows.GENERIC_READ;
-const GENERIC_WRITE = std.os.windows.GENERIC_WRITE;
-const GENERIC_EXECUTE = std.os.windows.GENERIC_EXECUTE;
-const GENERIC_ALL = std.os.windows.GENERIC_ALL;
-const EVENT_ALL_ACCESS = std.os.windows.EVENT_ALL_ACCESS;
-const TRUE = std.os.windows.TRUE;
-const FALSE = std.os.windows.FALSE;
-const BOOL = std.os.windows.BOOL;
-const BOOLEAN = std.os.windows.BOOLEAN;
-const BYTE = std.os.windows.BYTE;
-const CHAR = std.os.windows.CHAR;
-const UCHAR = std.os.windows.UCHAR;
-const WCHAR = std.os.windows.WCHAR;
-const FLOAT = std.os.windows.FLOAT;
-const HCRYPTPROV = std.os.windows.HCRYPTPROV;
-const ATOM = std.os.windows.ATOM;
-const WPARAM = std.os.windows.WPARAM;
-const LPARAM = std.os.windows.LPARAM;
-const LRESULT = std.os.windows.LRESULT;
-const HRESULT = std.os.windows.HRESULT;
-const HBRUSH = std.os.windows.HBRUSH;
-const HCURSOR = std.os.windows.HCURSOR;
-const HICON = std.os.windows.HICON;
-const HINSTANCE = std.os.windows.HINSTANCE;
-const HMENU = std.os.windows.HMENU;
-const HMODULE = std.os.windows.HMODULE;
-const HWND = std.os.windows.HWND;
-const HDC = std.os.windows.HDC;
-const HGLRC = std.os.windows.HGLRC;
-const FARPROC = std.os.windows.FARPROC;
-const PROC = std.os.windows.PROC;
-const INT = std.os.windows.INT;
-const SIZE_T = std.os.windows.SIZE_T;
-const UINT = std.os.windows.UINT;
-const USHORT = std.os.windows.USHORT;
-const SHORT = std.os.windows.SHORT;
-const ULONG = std.os.windows.ULONG;
-const LONG = std.os.windows.LONG;
-const WORD = std.os.windows.WORD;
-const DWORD = std.os.windows.DWORD;
-const ULONGLONG = std.os.windows.ULONGLONG;
-const LONGLONG = std.os.windows.LONGLONG;
-const LARGE_INTEGER = std.os.windows.LARGE_INTEGER;
-const ULARGE_INTEGER = std.os.windows.ULARGE_INTEGER;
-const LPCSTR = std.os.windows.LPCSTR;
-const LPCVOID = std.os.windows.LPCVOID;
-const LPSTR = std.os.windows.LPSTR;
-const LPVOID = std.os.windows.LPVOID;
-const LPWSTR = std.os.windows.LPWSTR;
-const LPCWSTR = std.os.windows.LPCWSTR;
-const PVOID = std.os.windows.PVOID;
-const PWSTR = std.os.windows.PWSTR;
-const PCWSTR = std.os.windows.PCWSTR;
-const HANDLE = std.os.windows.HANDLE;
-const GUID = std.os.windows.GUID;
-const NTSTATUS = std.os.windows.NTSTATUS;
-const CRITICAL_SECTION = std.os.windows.CRITICAL_SECTION;
-const SECURITY_ATTRIBUTES = std.os.windows.SECURITY_ATTRIBUTES;
-const RECT = std.os.windows.RECT;
-const POINT = std.os.windows.POINT;
-
 pub const E_FILE_NOT_FOUND = @as(HRESULT, @bitCast(@as(c_ulong, 0x80070002)));
 
 pub extern "ole32" fn CoInitializeEx(pvReserved: ?LPVOID, dwCoInit: DWORD) callconv(WINAPI) HRESULT;
@@ -90,15 +12,6 @@ pub const COINIT_MULTITHREADED = 0x3;
 pub const COINIT_DISABLE_OLE1DDE = 0x4;
 pub const COINIT_SPEED_OVER_MEMORY = 0x8;
 pub const UINT_MAX: UINT = 4294967295;
-pub const ULONG_PTR = usize;
-pub const LONG_PTR = isize;
-pub const DWORD_PTR = ULONG_PTR;
-pub const DWORD64 = u64;
-pub const ULONG64 = u64;
-pub const HLOCAL = HANDLE;
-pub const LANGID = c_ushort;
-
-pub const MAX_PATH = 260;
 
 /// [DEPRECATED]: Use proc specific errors as in std.os.windows
 pub const Error = error{
@@ -263,23 +176,6 @@ pub extern "user32" fn MessageBoxA(
     uType: UINT,
 ) callconv(WINAPI) i32;
 
-pub const KNOWNFOLDERID = GUID;
-
-pub const FOLDERID_LocalAppData = GUID.parse("{F1B32785-6FBA-4FCF-9D55-7B8E7F157091}");
-pub const FOLDERID_ProgramFiles = GUID.parse("{905e63b6-c1bf-494e-b29c-65b732d3d21a}");
-
-pub const KF_FLAG_DEFAULT = 0;
-pub const KF_FLAG_NO_APPCONTAINER_REDIRECTION = 65536;
-pub const KF_FLAG_CREATE = 32768;
-pub const KF_FLAG_DONT_VERIFY = 16384;
-pub const KF_FLAG_DONT_UNEXPAND = 8192;
-pub const KF_FLAG_NO_ALIAS = 4096;
-pub const KF_FLAG_INIT = 2048;
-pub const KF_FLAG_DEFAULT_PATH = 1024;
-pub const KF_FLAG_NOT_PARENT_RELATIVE = 512;
-pub const KF_FLAG_SIMPLE_IDLIST = 256;
-pub const KF_FLAG_ALIAS_ONLY = -2147483648;
-
 pub extern "shell32" fn SHGetKnownFolderPath(
     rfid: *const KNOWNFOLDERID,
     dwFlags: DWORD,
@@ -354,12 +250,7 @@ pub extern "kernel32" fn LoadLibraryA(lpLibFileName: LPCSTR) callconv(WINAPI) ?H
 
 pub extern "kernel32" fn GetProcAddress(hModule: HMODULE, lpProcName: LPCSTR) callconv(WINAPI) ?FARPROC;
 
-pub extern "kernel32" fn FreeLibrary(hModule: HMODULE) callconv(WINAPI) BOOL;
-
 pub extern "kernel32" fn ExitProcess(exit_code: UINT) callconv(WINAPI) noreturn;
-
-pub const PTHREAD_START_ROUTINE = *const fn (LPVOID) callconv(.C) DWORD;
-pub const LPTHREAD_START_ROUTINE = PTHREAD_START_ROUTINE;
 
 pub extern "kernel32" fn CreateThread(
     lpThreadAttributes: ?*SECURITY_ATTRIBUTES,
@@ -425,15 +316,6 @@ pub const CS_OWNDC: comptime_int = 0x0020;
 pub const CS_PARENTDC: comptime_int = 0x0080;
 pub const CS_SAVEBITS: comptime_int = 0x0800;
 pub const CS_VREDRAW: comptime_int = 0x0001;
-
-pub const OSVERSIONINFOW = extern struct {
-    dwOSVersionInfoSize: ULONG,
-    dwMajorVersion: ULONG,
-    dwMinorVersion: ULONG,
-    dwBuildNumber: ULONG,
-    dwPlatformId: ULONG,
-    szCSDVersion: [128]WCHAR,
-};
 
 pub const INT8 = i8;
 pub const UINT8 = u8;
@@ -695,3 +577,106 @@ pub extern "Opengl32" fn wglMakeCurrent(
 ) callconv(WINAPI) BOOL;
 
 pub extern "Opengl32" fn wglGetProcAddress(unnamedParam1: LPCSTR) callconv(WINAPI) ?PROC;
+
+// Reexport std.os.windows
+const std = @import("std");
+pub usingnamespace std.os.windows;
+const WINAPI = std.os.windows.WINAPI;
+const S_OK = std.os.windows.S_OK;
+const S_FALSE = std.os.windows.S_FALSE;
+const E_NOTIMPL = std.os.windows.E_NOTIMPL;
+const E_NOINTERFACE = std.os.windows.E_NOINTERFACE;
+const E_POINTER = std.os.windows.E_POINTER;
+const E_ABORT = std.os.windows.E_ABORT;
+const E_FAIL = std.os.windows.E_FAIL;
+const E_UNEXPECTED = std.os.windows.E_UNEXPECTED;
+const E_ACCESSDENIED = std.os.windows.E_ACCESSDENIED;
+const E_HANDLE = std.os.windows.E_HANDLE;
+const E_OUTOFMEMORY = std.os.windows.E_OUTOFMEMORY;
+const E_INVALIDARG = std.os.windows.E_INVALIDARG;
+const GENERIC_READ = std.os.windows.GENERIC_READ;
+const GENERIC_WRITE = std.os.windows.GENERIC_WRITE;
+const GENERIC_EXECUTE = std.os.windows.GENERIC_EXECUTE;
+const GENERIC_ALL = std.os.windows.GENERIC_ALL;
+const EVENT_ALL_ACCESS = std.os.windows.EVENT_ALL_ACCESS;
+const TRUE = std.os.windows.TRUE;
+const FALSE = std.os.windows.FALSE;
+const BOOL = std.os.windows.BOOL;
+const BOOLEAN = std.os.windows.BOOLEAN;
+const BYTE = std.os.windows.BYTE;
+const CHAR = std.os.windows.CHAR;
+const UCHAR = std.os.windows.UCHAR;
+const WCHAR = std.os.windows.WCHAR;
+const FLOAT = std.os.windows.FLOAT;
+const HCRYPTPROV = std.os.windows.HCRYPTPROV;
+const ATOM = std.os.windows.ATOM;
+const WPARAM = std.os.windows.WPARAM;
+const LPARAM = std.os.windows.LPARAM;
+const LRESULT = std.os.windows.LRESULT;
+const HRESULT = std.os.windows.HRESULT;
+const HBRUSH = std.os.windows.HBRUSH;
+const HCURSOR = std.os.windows.HCURSOR;
+const HICON = std.os.windows.HICON;
+const HINSTANCE = std.os.windows.HINSTANCE;
+const HMENU = std.os.windows.HMENU;
+const HMODULE = std.os.windows.HMODULE;
+const HWND = std.os.windows.HWND;
+const HDC = std.os.windows.HDC;
+const HGLRC = std.os.windows.HGLRC;
+const FARPROC = std.os.windows.FARPROC;
+const PROC = std.os.windows.PROC;
+const INT = std.os.windows.INT;
+const SIZE_T = std.os.windows.SIZE_T;
+const UINT = std.os.windows.UINT;
+const USHORT = std.os.windows.USHORT;
+const SHORT = std.os.windows.SHORT;
+const ULONG = std.os.windows.ULONG;
+const LONG = std.os.windows.LONG;
+const WORD = std.os.windows.WORD;
+const DWORD = std.os.windows.DWORD;
+const ULONGLONG = std.os.windows.ULONGLONG;
+const LONGLONG = std.os.windows.LONGLONG;
+const LARGE_INTEGER = std.os.windows.LARGE_INTEGER;
+const ULARGE_INTEGER = std.os.windows.ULARGE_INTEGER;
+const ULONG_PTR = std.os.windows.ULONG_PTR;
+const LONG_PTR = std.os.windows.LONG_PTR;
+const DWORD_PTR = std.os.windows.DWORD_PTR;
+const DWORD64 = std.os.windows.DWORD64;
+const ULONG64 = std.os.windows.ULONG64;
+const HLOCAL = std.os.windows.HLOCAL;
+const LPCSTR = std.os.windows.LPCSTR;
+const LPCVOID = std.os.windows.LPCVOID;
+const LPSTR = std.os.windows.LPSTR;
+const LPVOID = std.os.windows.LPVOID;
+const LPWSTR = std.os.windows.LPWSTR;
+const LPCWSTR = std.os.windows.LPCWSTR;
+const PVOID = std.os.windows.PVOID;
+const PWSTR = std.os.windows.PWSTR;
+const PCWSTR = std.os.windows.PCWSTR;
+const HANDLE = std.os.windows.HANDLE;
+const GUID = std.os.windows.GUID;
+const NTSTATUS = std.os.windows.NTSTATUS;
+const CRITICAL_SECTION = std.os.windows.CRITICAL_SECTION;
+const SECURITY_ATTRIBUTES = std.os.windows.SECURITY_ATTRIBUTES;
+const RECT = std.os.windows.RECT;
+const POINT = std.os.windows.POINT;
+const LANGID = std.os.windows.LANGID;
+const MAX_PATH = std.os.windows.MAX_PATH;
+const KNOWNFOLDERID = std.os.windows.KNOWNFOLDERID;
+const FOLDERID_LocalAppData = std.os.windows.FOLDERID_LocalAppData;
+const FOLDERID_ProgramFiles = std.os.windows.FOLDERID_ProgramFiles;
+const KF_FLAG_DEFAULT = std.os.windows.KF_FLAG_DEFAULT;
+const KF_FLAG_NO_APPCONTAINER_REDIRECTION = std.os.windows.KF_FLAG_NO_APPCONTAINER_REDIRECTION;
+const KF_FLAG_CREATE = std.os.windows.KF_FLAG_CREATE;
+const KF_FLAG_DONT_VERIFY = std.os.windows.KF_FLAG_DONT_VERIFY;
+const KF_FLAG_DONT_UNEXPAND = std.os.windows.KF_FLAG_DONT_UNEXPAND;
+const KF_FLAG_NO_ALIAS = std.os.windows.KF_FLAG_NO_ALIAS;
+const KF_FLAG_INIT = std.os.windows.KF_FLAG_INIT;
+const KF_FLAG_DEFAULT_PATH = std.os.windows.KF_FLAG_DEFAULT_PATH;
+const KF_FLAG_NOT_PARENT_RELATIVE = std.os.windows.KF_FLAG_NOT_PARENT_RELATIVE;
+const KF_FLAG_SIMPLE_IDLIST = std.os.windows.KF_FLAG_SIMPLE_IDLIST;
+const KF_FLAG_ALIAS_ONLY = std.os.windows.KF_FLAG_ALIAS_ONLY;
+const PTHREAD_START_ROUTINE = std.os.windows.PTHREAD_START_ROUTINE;
+const LPTHREAD_START_ROUTINE = std.os.windows.LPTHREAD_START_ROUTINE;
+const OSVERSIONINFOW = std.os.windows.OSVERSIONINFOW;
+const FreeLibrary = std.os.windows.FreeLibrary;
