@@ -9,6 +9,9 @@ pub fn build(b: *std.Build) !void {
         try checkGitLfsContent();
     };
 
+    const target = b.standardTargetOptions(.{});
+    const optimize = b.standardOptimizeOption(.{});
+
     const options = .{
         .zxaudio2_debug_layer = b.option(
             bool,
@@ -34,25 +37,47 @@ pub fn build(b: *std.Build) !void {
 
     const zwindows_module = b.addModule("zwindows", .{
         .root_source_file = b.path("src/zwindows.zig"),
+        .target = target,
+        .optimize = optimize,
     });
 
     const options_module = options_step.createModule();
 
-    _ = b.addModule("zd3d12", .{
+    const zd3d12_module = b.addModule("zd3d12", .{
         .root_source_file = b.path("src/zd3d12.zig"),
+        .target = target,
+        .optimize = optimize,
         .imports = &.{
             .{ .name = "options", .module = options_module },
             .{ .name = "zwindows", .module = zwindows_module },
         },
     });
 
-    _ = b.addModule("zxaudio2", .{
+    const zxaudio2_module = b.addModule("zxaudio2", .{
         .root_source_file = b.path("src/zxaudio2.zig"),
+        .target = target,
+        .optimize = optimize,
         .imports = &.{
             .{ .name = "options", .module = options_module },
             .{ .name = "zwindows", .module = zwindows_module },
         },
     });
+
+    { // Tests
+        const test_step = b.step("test", "Run library tests");
+
+        const tests = b.addTest(.{
+            .root_source_file = b.path("src/tests.zig"),
+            .target = target,
+            .optimize = optimize,
+        });
+        tests.root_module.addImport("zwindows", zwindows_module);
+        tests.root_module.addImport("zd3d12", zd3d12_module);
+        tests.root_module.addImport("zxaudio2", zxaudio2_module);
+
+        const run_tests = b.addRunArtifact(tests);
+        test_step.dependOn(&run_tests.step);
+    }
 }
 
 pub fn activateSdk(b: *std.Build, zwindows: *std.Build.Dependency) *std.Build.Step {
