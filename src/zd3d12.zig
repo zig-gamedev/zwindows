@@ -11,12 +11,13 @@ const d3d12d = zwindows.d3d12d;
 const d3d = zwindows.d3d;
 const d2d1 = zwindows.d2d1;
 const d3d11on12 = zwindows.d3d11on12;
-const dds_loader = zwindows.dds_loader;
 const wic = zwindows.wic;
 const HResultError = zwindows.HResultError;
 const hrPanic = zwindows.hrPanic;
 const hrPanicOnFail = zwindows.hrPanicOnFail;
 const hrErrorOnFail = zwindows.hrErrorOnFail;
+
+const dds_loader = @import("dds_loader.zig");
 
 const options = @import("options");
 const enable_debug_layer = options.zd3d12_debug_layer;

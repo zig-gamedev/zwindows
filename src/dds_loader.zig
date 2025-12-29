@@ -2,9 +2,11 @@
 // https://github.com/microsoft/DirectXTK12/blob/main/Src/DDSTextureLoader.cpp
 const std = @import("std");
 const assert = std.debug.assert;
-const windows = @import("windows.zig");
-const dxgi = @import("dxgi.zig");
-const d3d12 = @import("d3d12.zig");
+
+const zwindows = @import("zwindows");
+const windows = zwindows.windows;
+const dxgi = zwindows.dxgi;
+const d3d12 = zwindows.d3d12;
 
 const DDS_HEADER_FLAGS_TEXTURE: u32 = 0x00001007; // DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT
 const DDS_HEADER_FLAGS_MIPMAP: u32 = 0x00020000; // DDSD_MIPMAPCOUNT
@@ -135,7 +137,7 @@ pub fn loadTextureFromFile(
     }
 
     // Read all file
-    const file_data = try arena.alloc(u8, file_size);
+    const file_data = try arena.alloc(u8, @intCast(file_size));
     const read_bytes = try file.readAll(file_data);
     if (read_bytes != file_size) {
         return DdsError.InvalidDDSData;
