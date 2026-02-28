@@ -1,5 +1,6 @@
 const windows = @import("../windows.zig");
 const IUnknown = windows.IUnknown;
+const ULONG = windows.ULONG;
 const HRESULT = windows.HRESULT;
 const WINAPI = windows.WINAPI;
 const GUID = windows.GUID;
@@ -1394,51 +1395,36 @@ pub const INFO_QUEUE_FILTER = extern struct {
 pub const IID_IInfoQueue = GUID.parse("{6543dbb6-1b48-42f5-ab82-e97ec74326f6}");
 pub const IInfoQueue = extern struct {
     __v: *const VTable,
-
-    pub usingnamespace Methods(@This());
-
-    pub fn Methods(comptime T: type) type {
-        return extern struct {
-            pub usingnamespace IUnknown.Methods(T);
-
-            pub inline fn GetMessage(
-                self: *T,
-                MessageIndex: UINT64,
-                pMessage: ?*MESSAGE,
-                pMessageByteLength: *SIZE_T,
-            ) HRESULT {
-                return @as(*const IInfoQueue.VTable, @ptrCast(self.__v)).GetMessage(
-                    @as(*IInfoQueue, @ptrCast(self)),
-                    MessageIndex,
-                    pMessage,
-                    pMessageByteLength,
-                );
-            }
-            pub inline fn GetNumStoredMessages(self: *T) UINT64 {
-                return @as(*const IInfoQueue.VTable, @ptrCast(self.__v))
-                    .GetNumStoredMessages(@as(*IInfoQueue, @ptrCast(self)));
-            }
-            pub inline fn AddStorageFilterEntries(self: *T, filter: *INFO_QUEUE_FILTER) HRESULT {
-                return @as(*const IInfoQueue.VTable, @ptrCast(self.__v))
-                    .AddStorageFilterEntries(@as(*IInfoQueue, @ptrCast(self)), filter);
-            }
-            pub inline fn PushEmptyStorageFilter(self: *T) HRESULT {
-                return @as(*const IInfoQueue.VTable, @ptrCast(self.__v))
-                    .PushEmptyStorageFilter(@as(*IInfoQueue, @ptrCast(self)));
-            }
-            pub inline fn PushStorageFilter(self: *T, filter: *INFO_QUEUE_FILTER) HRESULT {
-                return @as(*const IInfoQueue.VTable, @ptrCast(self.__v))
-                    .PushStorageFilter(@as(*IInfoQueue, @ptrCast(self)), filter);
-            }
-            pub inline fn PopStorageFilter(self: *T) void {
-                @as(*const IInfoQueue.VTable, @ptrCast(self.__v)).PopStorageFilter();
-            }
-            pub inline fn SetMuteDebugOutput(self: *T, mute: BOOL) void {
-                @as(*const IInfoQueue.VTable, @ptrCast(self.__v)).SetMuteDebugOutput(@as(*IInfoQueue, @ptrCast(self)), mute);
-            }
-        };
+    pub inline fn QueryInterface(self: *IInfoQueue, guid: *const GUID, outobj: ?*?*anyopaque) HRESULT {
+        return IUnknown.QueryInterface(@ptrCast(self), guid, outobj);
     }
-
+    pub inline fn AddRef(self: *IInfoQueue) ULONG {
+        return IUnknown.AddRef(@ptrCast(self));
+    }
+    pub inline fn Release(self: *IInfoQueue) ULONG {
+        return IUnknown.Release(@ptrCast(self));
+    }
+    pub inline fn GetMessage(self: *IInfoQueue, MessageIndex: UINT64, pMessage: ?*MESSAGE, pMessageByteLength: *SIZE_T) HRESULT {
+        return self.__v.GetMessage(self, MessageIndex, pMessage, pMessageByteLength);
+    }
+    pub inline fn GetNumStoredMessages(self: *IInfoQueue) UINT64 {
+        return self.__v.GetNumStoredMessages(self);
+    }
+    pub inline fn AddStorageFilterEntries(self: *IInfoQueue, filter: *INFO_QUEUE_FILTER) HRESULT {
+        return self.__v.AddStorageFilterEntries(self, filter);
+    }
+    pub inline fn PushEmptyStorageFilter(self: *IInfoQueue) HRESULT {
+        return self.__v.PushEmptyStorageFilter(self);
+    }
+    pub inline fn PushStorageFilter(self: *IInfoQueue, filter: *INFO_QUEUE_FILTER) HRESULT {
+        return self.__v.PushStorageFilter(self, filter);
+    }
+    pub inline fn PopStorageFilter(self: *IInfoQueue) void {
+        self.__v.PopStorageFilter(self);
+    }
+    pub inline fn SetMuteDebugOutput(self: *IInfoQueue, mute: BOOL) void {
+        self.__v.SetMuteDebugOutput(self, mute);
+    }
     pub const VTable = extern struct {
         const T = IInfoQueue;
         base: IUnknown.VTable,

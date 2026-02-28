@@ -1759,7 +1759,8 @@ pub const GraphicsContext = struct {
             null,
         );
 
-        const desc = gctx.lookupResource(texture).?.GetDesc();
+        var desc: d3d12.RESOURCE_DESC = undefined;
+        _ = gctx.lookupResource(texture).?.GetDesc(&desc);
 
         var layout: [1]d3d12.PLACED_SUBRESOURCE_FOOTPRINT = undefined;
         var required_size: u64 = undefined;
@@ -1840,7 +1841,7 @@ pub const GraphicsContext = struct {
             .{ .COPY_DEST = true },
             null,
         );
-        texture_desc = gctx.lookupResource(texture).?.GetDesc();
+        _ = gctx.lookupResource(texture).?.GetDesc(&texture_desc);
 
         for (0..subresources.items.len) |index| {
             const subresource_index = @as(u32, @intCast(index));
@@ -2278,7 +2279,9 @@ const ResourcePool = struct {
         }
         assert(slot_idx <= max_num_resources);
 
-        pool.resources[slot_idx] = .{ .raw = raw, .state = state, .desc = raw.GetDesc() };
+        var desc: d3d12.RESOURCE_DESC = undefined;
+        _ = raw.GetDesc(&desc);
+        pool.resources[slot_idx] = .{ .raw = raw, .state = state, .desc = desc };
         return .{
             .index = @as(u16, @intCast(slot_idx)),
             .generation = blk: {
@@ -2492,13 +2495,18 @@ const DescriptorHeap = struct {
             }, &d3d12.IID_IDescriptorHeap, @as(*?*anyopaque, @ptrCast(&heap))));
             break :blk heap.?;
         };
+        var cpu_handle: d3d12.CPU_DESCRIPTOR_HANDLE = undefined;
+        _ = heap.GetCPUDescriptorHandleForHeapStart(&cpu_handle);
         return DescriptorHeap{
             .heap = heap,
             .base = .{
-                .cpu_handle = heap.GetCPUDescriptorHandleForHeapStart(),
+                .cpu_handle = cpu_handle,
                 .gpu_handle = blk: {
-                    if (flags.SHADER_VISIBLE)
-                        break :blk heap.GetGPUDescriptorHandleForHeapStart();
+                    if (flags.SHADER_VISIBLE) {
+                        var gpu_handle: d3d12.GPU_DESCRIPTOR_HANDLE = undefined;
+                        _ = heap.GetGPUDescriptorHandleForHeapStart(&gpu_handle);
+                        break :blk gpu_handle;
+                    }
                     break :blk d3d12.GPU_DESCRIPTOR_HANDLE{ .ptr = 0 };
                 },
             },

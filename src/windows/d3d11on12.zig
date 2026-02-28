@@ -1,5 +1,6 @@
 const windows = @import("../windows.zig");
 const IUnknown = windows.IUnknown;
+const ULONG = windows.ULONG;
 const UINT = windows.UINT;
 const WINAPI = windows.WINAPI;
 const GUID = windows.GUID;
@@ -17,51 +18,24 @@ pub const RESOURCE_FLAGS = extern struct {
 
 pub const IDevice = extern struct {
     __v: *const VTable,
-
-    pub usingnamespace Methods(@This());
-
-    pub fn Methods(comptime T: type) type {
-        return extern struct {
-            pub usingnamespace IUnknown.Methods(T);
-
-            pub inline fn CreateWrappedResource(
-                self: *T,
-                resource12: *IUnknown,
-                flags11: *const RESOURCE_FLAGS,
-                in_state: RESOURCE_STATES,
-                out_state: RESOURCE_STATES,
-                guid: *const GUID,
-                resource11: ?*?*anyopaque,
-            ) HRESULT {
-                return @as(*const IDevice.VTable, @ptrCast(self.__v)).CreateWrappedResource(
-                    @as(*IDevice, @ptrCast(self)),
-                    resource12,
-                    flags11,
-                    in_state,
-                    out_state,
-                    guid,
-                    resource11,
-                );
-            }
-            pub inline fn ReleaseWrappedResources(
-                self: *T,
-                resources: [*]const *d3d11.IResource,
-                num_resources: UINT,
-            ) void {
-                @as(*const IDevice.VTable, @ptrCast(self.__v))
-                    .ReleaseWrappedResources(@as(*IDevice, @ptrCast(self)), resources, num_resources);
-            }
-            pub inline fn AcquireWrappedResources(
-                self: *T,
-                resources: [*]const *d3d11.IResource,
-                num_resources: UINT,
-            ) void {
-                @as(*const IDevice.VTable, @ptrCast(self.__v))
-                    .AcquireWrappedResources(@as(*IDevice, @ptrCast(self)), resources, num_resources);
-            }
-        };
+    pub inline fn QueryInterface(self: *IDevice, guid: *const GUID, outobj: ?*?*anyopaque) HRESULT {
+        return IUnknown.QueryInterface(@ptrCast(self), guid, outobj);
     }
-
+    pub inline fn AddRef(self: *IDevice) ULONG {
+        return IUnknown.AddRef(@ptrCast(self));
+    }
+    pub inline fn Release(self: *IDevice) ULONG {
+        return IUnknown.Release(@ptrCast(self));
+    }
+    pub inline fn CreateWrappedResource(self: *IDevice, resource12: *IUnknown, flags11: *const RESOURCE_FLAGS, in_state: RESOURCE_STATES, out_state: RESOURCE_STATES, guid: *const GUID, resource11: ?*?*anyopaque) HRESULT {
+        return self.__v.CreateWrappedResource(self, resource12, flags11, in_state, out_state, guid, resource11);
+    }
+    pub inline fn ReleaseWrappedResources(self: *IDevice, resources: [*]const *d3d11.IResource, num_resources: UINT) void {
+        self.__v.ReleaseWrappedResources(self, resources, num_resources);
+    }
+    pub inline fn AcquireWrappedResources(self: *IDevice, resources: [*]const *d3d11.IResource, num_resources: UINT) void {
+        self.__v.AcquireWrappedResources(self, resources, num_resources);
+    }
     pub const VTable = extern struct {
         base: IUnknown.VTable,
         CreateWrappedResource: *const fn (
@@ -80,15 +54,24 @@ pub const IDevice = extern struct {
 
 pub const IDevice1 = extern struct {
     __v: *const VTable,
-
-    pub usingnamespace Methods(@This());
-
-    pub fn Methods(comptime T: type) type {
-        return extern struct {
-            pub usingnamespace IDevice.Methods(T);
-        };
+    pub inline fn QueryInterface(self: *IDevice1, guid: *const GUID, outobj: ?*?*anyopaque) HRESULT {
+        return IDevice.QueryInterface(@ptrCast(self), guid, outobj);
     }
-
+    pub inline fn AddRef(self: *IDevice1) ULONG {
+        return IDevice.AddRef(@ptrCast(self));
+    }
+    pub inline fn Release(self: *IDevice1) ULONG {
+        return IDevice.Release(@ptrCast(self));
+    }
+    pub inline fn CreateWrappedResource(self: *IDevice1, resource12: *IUnknown, flags11: *const RESOURCE_FLAGS, in_state: RESOURCE_STATES, out_state: RESOURCE_STATES, guid: *const GUID, resource11: ?*?*anyopaque) HRESULT {
+        return IDevice.CreateWrappedResource(@ptrCast(self), resource12, flags11, in_state, out_state, guid, resource11);
+    }
+    pub inline fn ReleaseWrappedResources(self: *IDevice1, resources: [*]const *d3d11.IResource, num_resources: UINT) void {
+        IDevice.ReleaseWrappedResources(@ptrCast(self), resources, num_resources);
+    }
+    pub inline fn AcquireWrappedResources(self: *IDevice1, resources: [*]const *d3d11.IResource, num_resources: UINT) void {
+        IDevice.AcquireWrappedResources(@ptrCast(self), resources, num_resources);
+    }
     pub const VTable = extern struct {
         base: IDevice.VTable,
         GetD3D12Device: *anyopaque,
@@ -97,15 +80,24 @@ pub const IDevice1 = extern struct {
 
 pub const IDevice2 = extern struct {
     __v: *const VTable,
-
-    pub usingnamespace Methods(@This());
-
-    pub fn Methods(comptime T: type) type {
-        return extern struct {
-            pub usingnamespace IDevice1.Methods(T);
-        };
+    pub inline fn QueryInterface(self: *IDevice2, guid: *const GUID, outobj: ?*?*anyopaque) HRESULT {
+        return IDevice1.QueryInterface(@ptrCast(self), guid, outobj);
     }
-
+    pub inline fn AddRef(self: *IDevice2) ULONG {
+        return IDevice1.AddRef(@ptrCast(self));
+    }
+    pub inline fn Release(self: *IDevice2) ULONG {
+        return IDevice1.Release(@ptrCast(self));
+    }
+    pub inline fn CreateWrappedResource(self: *IDevice2, resource12: *IUnknown, flags11: *const RESOURCE_FLAGS, in_state: RESOURCE_STATES, out_state: RESOURCE_STATES, guid: *const GUID, resource11: ?*?*anyopaque) HRESULT {
+        return IDevice1.CreateWrappedResource(@ptrCast(self), resource12, flags11, in_state, out_state, guid, resource11);
+    }
+    pub inline fn ReleaseWrappedResources(self: *IDevice2, resources: [*]const *d3d11.IResource, num_resources: UINT) void {
+        IDevice1.ReleaseWrappedResources(@ptrCast(self), resources, num_resources);
+    }
+    pub inline fn AcquireWrappedResources(self: *IDevice2, resources: [*]const *d3d11.IResource, num_resources: UINT) void {
+        IDevice1.AcquireWrappedResources(@ptrCast(self), resources, num_resources);
+    }
     pub const VTable = extern struct {
         base: IDevice1.VTable,
         UnwrapUnderlyingResource: *anyopaque,

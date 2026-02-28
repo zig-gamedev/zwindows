@@ -506,24 +506,18 @@ pub inline fn HIWORD(dword: DWORD) WORD {
 }
 
 pub const IID_IUnknown = GUID.parse("{00000000-0000-0000-C000-000000000046}");
+
 pub const IUnknown = extern struct {
     __v: *const VTable,
 
-    pub usingnamespace Methods(@This());
-
-    pub fn Methods(comptime T: type) type {
-        return extern struct {
-            pub inline fn QueryInterface(self: *T, guid: *const GUID, outobj: ?*?*anyopaque) HRESULT {
-                return @as(*const IUnknown.VTable, @ptrCast(self.__v))
-                    .QueryInterface(@as(*IUnknown, @ptrCast(self)), guid, outobj);
-            }
-            pub inline fn AddRef(self: *T) ULONG {
-                return @as(*const IUnknown.VTable, @ptrCast(self.__v)).AddRef(@as(*IUnknown, @ptrCast(self)));
-            }
-            pub inline fn Release(self: *T) ULONG {
-                return @as(*const IUnknown.VTable, @ptrCast(self.__v)).Release(@as(*IUnknown, @ptrCast(self)));
-            }
-        };
+    pub inline fn QueryInterface(self: *IUnknown, guid: *const GUID, outobj: ?*?*anyopaque) HRESULT {
+        return self.__v.QueryInterface(self, guid, outobj);
+    }
+    pub inline fn AddRef(self: *IUnknown) ULONG {
+        return self.__v.AddRef(self);
+    }
+    pub inline fn Release(self: *IUnknown) ULONG {
+        return self.__v.Release(self);
     }
 
     pub const VTable = extern struct {

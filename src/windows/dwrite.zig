@@ -1,6 +1,7 @@
 const windows = @import("../windows.zig");
 const UINT = windows.UINT;
 const IUnknown = windows.IUnknown;
+const ULONG = windows.ULONG;
 const GUID = windows.GUID;
 const HRESULT = windows.HRESULT;
 const WINAPI = windows.WINAPI;
@@ -66,15 +67,15 @@ pub const PARAGRAPH_ALIGNMENT = enum(UINT) {
 
 pub const IFontCollection = extern struct {
     __v: *const VTable,
-
-    pub usingnamespace Methods(@This());
-
-    pub fn Methods(comptime T: type) type {
-        return extern struct {
-            pub usingnamespace IUnknown.Methods(T);
-        };
+    pub inline fn QueryInterface(self: *IFontCollection, guid: *const GUID, outobj: ?*?*anyopaque) HRESULT {
+        return IUnknown.QueryInterface(@ptrCast(self), guid, outobj);
     }
-
+    pub inline fn AddRef(self: *IFontCollection) ULONG {
+        return IUnknown.AddRef(@ptrCast(self));
+    }
+    pub inline fn Release(self: *IFontCollection) ULONG {
+        return IUnknown.Release(@ptrCast(self));
+    }
     pub const VTable = extern struct {
         base: IUnknown.VTable,
         GetFontFamilyCount: *anyopaque,
@@ -86,24 +87,21 @@ pub const IFontCollection = extern struct {
 
 pub const ITextFormat = extern struct {
     __v: *const VTable,
-
-    pub usingnamespace Methods(@This());
-
-    pub fn Methods(comptime T: type) type {
-        return extern struct {
-            pub usingnamespace IUnknown.Methods(T);
-
-            pub inline fn SetTextAlignment(self: *T, alignment: TEXT_ALIGNMENT) HRESULT {
-                return @as(*const ITextFormat.VTable, @ptrCast(self.__v))
-                    .SetTextAlignment(@as(*ITextFormat, @ptrCast(self)), alignment);
-            }
-            pub inline fn SetParagraphAlignment(self: *T, alignment: PARAGRAPH_ALIGNMENT) HRESULT {
-                return @as(*const ITextFormat.VTable, @ptrCast(self.__v))
-                    .SetParagraphAlignment(@as(*ITextFormat, @ptrCast(self)), alignment);
-            }
-        };
+    pub inline fn QueryInterface(self: *ITextFormat, guid: *const GUID, outobj: ?*?*anyopaque) HRESULT {
+        return IUnknown.QueryInterface(@ptrCast(self), guid, outobj);
     }
-
+    pub inline fn AddRef(self: *ITextFormat) ULONG {
+        return IUnknown.AddRef(@ptrCast(self));
+    }
+    pub inline fn Release(self: *ITextFormat) ULONG {
+        return IUnknown.Release(@ptrCast(self));
+    }
+    pub inline fn SetTextAlignment(self: *ITextFormat, alignment: TEXT_ALIGNMENT) HRESULT {
+        return self.__v.SetTextAlignment(self, alignment);
+    }
+    pub inline fn SetParagraphAlignment(self: *ITextFormat, alignment: PARAGRAPH_ALIGNMENT) HRESULT {
+        return self.__v.SetParagraphAlignment(self, alignment);
+    }
     pub const VTable = extern struct {
         base: IUnknown.VTable,
         SetTextAlignment: *const fn (*ITextFormat, TEXT_ALIGNMENT) callconv(WINAPI) HRESULT,
@@ -136,39 +134,18 @@ pub const ITextFormat = extern struct {
 
 pub const IFactory = extern struct {
     __v: *const VTable,
-
-    pub usingnamespace Methods(@This());
-
-    pub fn Methods(comptime T: type) type {
-        return extern struct {
-            pub usingnamespace IUnknown.Methods(T);
-
-            pub inline fn CreateTextFormat(
-                self: *T,
-                font_family_name: LPCWSTR,
-                font_collection: ?*IFontCollection,
-                font_weight: FONT_WEIGHT,
-                font_style: FONT_STYLE,
-                font_stretch: FONT_STRETCH,
-                font_size: FLOAT,
-                locale_name: LPCWSTR,
-                text_format: *?*ITextFormat,
-            ) HRESULT {
-                return @as(*const IFactory.VTable, @ptrCast(self.__v)).CreateTextFormat(
-                    @as(*IFactory, @ptrCast(self)),
-                    font_family_name,
-                    font_collection,
-                    font_weight,
-                    font_style,
-                    font_stretch,
-                    font_size,
-                    locale_name,
-                    text_format,
-                );
-            }
-        };
+    pub inline fn QueryInterface(self: *IFactory, guid: *const GUID, outobj: ?*?*anyopaque) HRESULT {
+        return IUnknown.QueryInterface(@ptrCast(self), guid, outobj);
     }
-
+    pub inline fn AddRef(self: *IFactory) ULONG {
+        return IUnknown.AddRef(@ptrCast(self));
+    }
+    pub inline fn Release(self: *IFactory) ULONG {
+        return IUnknown.Release(@ptrCast(self));
+    }
+    pub inline fn CreateTextFormat(self: *IFactory, font_family_name: LPCWSTR, font_collection: ?*IFontCollection, font_weight: FONT_WEIGHT, font_style: FONT_STYLE, font_stretch: FONT_STRETCH, font_size: FLOAT, locale_name: LPCWSTR, text_format: *?*ITextFormat) HRESULT {
+        return self.__v.CreateTextFormat(self, font_family_name, font_collection, font_weight, font_style, font_stretch, font_size, locale_name, text_format);
+    }
     pub const VTable = extern struct {
         base: IUnknown.VTable,
         GetSystemFontCollection: *anyopaque,
