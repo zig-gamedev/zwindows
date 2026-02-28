@@ -66,96 +66,45 @@ pub const PROCESS_BUFFER_PARAMETERS = extern struct {
 pub const IID_IXAPO = GUID.parse("{A410B984-9839-4819-A0BE-2856AE6B3ADB}");
 pub const IXAPO = extern struct {
     __v: *const VTable,
-
-    pub usingnamespace Methods(@This());
-
-    pub fn Methods(comptime T: type) type {
-        return extern struct {
-            pub usingnamespace IUnknown.Methods(T);
-
-            pub inline fn GetRegistrationProperties(self: *T, props: **REGISTRATION_PROPERTIES) HRESULT {
-                return @as(*const IXAPO.VTable, @ptrCast(self.__v))
-                    .GetRegistrationProperties(@as(*IXAPO, @ptrCast(self)), props);
-            }
-            pub inline fn IsInputFormatSupported(
-                self: *T,
-                output_format: *const WAVEFORMATEX,
-                requested_input_format: *const WAVEFORMATEX,
-                supported_input_format: ?**WAVEFORMATEX,
-            ) HRESULT {
-                return @as(*const IXAPO.VTable, @ptrCast(self.__v)).IsInputFormatSupported(
-                    @as(*IXAPO, @ptrCast(self)),
-                    output_format,
-                    requested_input_format,
-                    supported_input_format,
-                );
-            }
-            pub inline fn IsOutputFormatSupported(
-                self: *T,
-                input_format: *const WAVEFORMATEX,
-                requested_output_format: *const WAVEFORMATEX,
-                supported_output_format: ?**WAVEFORMATEX,
-            ) HRESULT {
-                return @as(*const IXAPO.VTable, @ptrCast(self.__v)).IsOutputFormatSupported(
-                    @as(*IXAPO, @ptrCast(self)),
-                    input_format,
-                    requested_output_format,
-                    supported_output_format,
-                );
-            }
-            pub inline fn Initialize(self: *T, data: ?*const anyopaque, data_size: UINT32) HRESULT {
-                return @as(*const IXAPO.VTable, @ptrCast(self.__v))
-                    .Initialize(@as(*IXAPO, @ptrCast(self)), data, data_size);
-            }
-            pub inline fn Reset(self: *T) void {
-                @as(*const IXAPO.VTable, @ptrCast(self.__v)).Reset(@as(*IXAPO, @ptrCast(self)));
-            }
-            pub inline fn LockForProcess(
-                self: *T,
-                num_input_params: UINT32,
-                input_params: ?[*]const LOCKFORPROCESS_BUFFER_PARAMETERS,
-                num_output_params: UINT32,
-                output_params: ?[*]const LOCKFORPROCESS_BUFFER_PARAMETERS,
-            ) HRESULT {
-                return @as(*const IXAPO.VTable, @ptrCast(self.__v)).LockForProcess(
-                    @as(*IXAPO, @ptrCast(self)),
-                    num_input_params,
-                    input_params,
-                    num_output_params,
-                    output_params,
-                );
-            }
-            pub inline fn UnlockForProcess(self: *T) void {
-                @as(*const IXAPO.VTable, @ptrCast(self.__v)).UnlockForProcess(@as(*IXAPO, @ptrCast(self)));
-            }
-            pub inline fn Process(
-                self: *T,
-                num_input_params: UINT32,
-                input_params: ?[*]const PROCESS_BUFFER_PARAMETERS,
-                num_output_params: UINT32,
-                output_params: ?[*]PROCESS_BUFFER_PARAMETERS,
-                is_enabled: BOOL,
-            ) void {
-                return @as(*const IXAPO.VTable, @ptrCast(self.__v)).Process(
-                    @as(*IXAPO, @ptrCast(self)),
-                    num_input_params,
-                    input_params,
-                    num_output_params,
-                    output_params,
-                    is_enabled,
-                );
-            }
-            pub inline fn CalcInputFrames(self: *T, num_output_frames: UINT32) UINT32 {
-                return @as(*const IXAPO.VTable, @ptrCast(self.__v))
-                    .CalcInputFrames(@as(*IXAPO, @ptrCast(self)), num_output_frames);
-            }
-            pub inline fn CalcOutputFrames(self: *T, num_input_frames: UINT32) UINT32 {
-                return @as(*const IXAPO.VTable, @ptrCast(self.__v))
-                    .CalcOutputFrames(@as(*IXAPO, @ptrCast(self)), num_input_frames);
-            }
-        };
+    pub inline fn QueryInterface(self: *IXAPO, guid: *const GUID, outobj: ?*?*anyopaque) HRESULT {
+        return IUnknown.QueryInterface(@ptrCast(self), guid, outobj);
     }
-
+    pub inline fn AddRef(self: *IXAPO) ULONG {
+        return IUnknown.AddRef(@ptrCast(self));
+    }
+    pub inline fn Release(self: *IXAPO) ULONG {
+        return IUnknown.Release(@ptrCast(self));
+    }
+    pub inline fn GetRegistrationProperties(self: *IXAPO, props: **REGISTRATION_PROPERTIES) HRESULT {
+        return self.__v.GetRegistrationProperties(self, props);
+    }
+    pub inline fn IsInputFormatSupported(self: *IXAPO, output_format: *const WAVEFORMATEX, requested_input_format: *const WAVEFORMATEX, supported_input_format: ?**WAVEFORMATEX) HRESULT {
+        return self.__v.IsInputFormatSupported(self, output_format, requested_input_format, supported_input_format);
+    }
+    pub inline fn IsOutputFormatSupported(self: *IXAPO, input_format: *const WAVEFORMATEX, requested_output_format: *const WAVEFORMATEX, supported_output_format: ?**WAVEFORMATEX) HRESULT {
+        return self.__v.IsOutputFormatSupported(self, input_format, requested_output_format, supported_output_format);
+    }
+    pub inline fn Initialize(self: *IXAPO, data: ?*const anyopaque, data_size: UINT32) HRESULT {
+        return self.__v.Initialize(self, data, data_size);
+    }
+    pub inline fn Reset(self: *IXAPO) void {
+        self.__v.Reset(self);
+    }
+    pub inline fn LockForProcess(self: *IXAPO, num_input_params: UINT32, input_params: ?[*]const LOCKFORPROCESS_BUFFER_PARAMETERS, num_output_params: UINT32, output_params: ?[*]const LOCKFORPROCESS_BUFFER_PARAMETERS) HRESULT {
+        return self.__v.LockForProcess(self, num_input_params, input_params, num_output_params, output_params);
+    }
+    pub inline fn UnlockForProcess(self: *IXAPO) void {
+        self.__v.UnlockForProcess(self);
+    }
+    pub inline fn Process(self: *IXAPO, num_input_params: UINT32, input_params: ?[*]const PROCESS_BUFFER_PARAMETERS, num_output_params: UINT32, output_params: ?[*]PROCESS_BUFFER_PARAMETERS, is_enabled: BOOL) void {
+        self.__v.Process(self, num_input_params, input_params, num_output_params, output_params, is_enabled);
+    }
+    pub inline fn CalcInputFrames(self: *IXAPO, num_output_frames: UINT32) UINT32 {
+        return self.__v.CalcInputFrames(self, num_output_frames);
+    }
+    pub inline fn CalcOutputFrames(self: *IXAPO, num_input_frames: UINT32) UINT32 {
+        return self.__v.CalcOutputFrames(self, num_input_frames);
+    }
     pub const VTable = extern struct {
         const T = IXAPO;
         base: IUnknown.VTable,
@@ -197,24 +146,21 @@ pub const IXAPO = extern struct {
 
 pub const IXAPOParameters = extern struct {
     __v: *const VTable,
-
-    pub usingnamespace Methods(@This());
-
-    pub fn Methods(comptime T: type) type {
-        return extern struct {
-            pub usingnamespace IUnknown.Methods(T);
-
-            pub inline fn SetParameters(self: *T, params: *const anyopaque, size: UINT32) void {
-                @as(*const IXAPOParameters.VTable, @ptrCast(self.__v))
-                    .SetParameters(@as(*IXAPOParameters, @ptrCast(self)), params, size);
-            }
-            pub inline fn GetParameters(self: *T, params: *anyopaque, size: UINT32) void {
-                @as(*const IXAPOParameters.VTable, @ptrCast(self.__v))
-                    .GetParameters(@as(*IXAPOParameters, @ptrCast(self)), params, size);
-            }
-        };
+    pub inline fn QueryInterface(self: *IXAPOParameters, guid: *const GUID, outobj: ?*?*anyopaque) HRESULT {
+        return IUnknown.QueryInterface(@ptrCast(self), guid, outobj);
     }
-
+    pub inline fn AddRef(self: *IXAPOParameters) ULONG {
+        return IUnknown.AddRef(@ptrCast(self));
+    }
+    pub inline fn Release(self: *IXAPOParameters) ULONG {
+        return IUnknown.Release(@ptrCast(self));
+    }
+    pub inline fn SetParameters(self: *IXAPOParameters, params: *const anyopaque, size: UINT32) void {
+        self.__v.SetParameters(self, params, size);
+    }
+    pub inline fn GetParameters(self: *IXAPOParameters, params: *anyopaque, size: UINT32) void {
+        self.__v.GetParameters(self, params, size);
+    }
     const VTable = extern struct {
         base: IUnknown.VTable,
         SetParameters: *const fn (*IXAPOParameters, *const anyopaque, UINT32) callconv(WINAPI) void,

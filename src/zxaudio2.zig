@@ -34,7 +34,6 @@ const optimal_voice_format = WAVEFORMATEX{
 };
 
 const StopOnBufferEndVoiceCallback = extern struct {
-    usingnamespace xaudio2.IVoiceCallback.Methods(@This());
     __v: *const xaudio2.IVoiceCallback.VTable = &vtable,
 
     const vtable = xaudio2.IVoiceCallback.VTable{ .OnBufferEnd = _onBufferEnd };
@@ -391,7 +390,6 @@ pub const Stream = struct {
 };
 
 const StreamVoiceCallback = extern struct {
-    usingnamespace xaudio2.IVoiceCallback.Methods(@This());
     __v: *const xaudio2.IVoiceCallback.VTable = &vtable,
 
     stream: ?*Stream = null,
@@ -405,11 +403,19 @@ const StreamVoiceCallback = extern struct {
 };
 
 const SourceReaderCallback = extern struct {
-    usingnamespace mf.ISourceReaderCallback.Methods(@This());
     __v: *const mf.ISourceReaderCallback.VTable = &vtable,
-
     refcount: u32 = 1,
     stream: ?*Stream = null,
+
+    pub inline fn QueryInterface(self: *SourceReaderCallback, guid: *const windows.GUID, outobj: ?*?*anyopaque) HRESULT {
+        return self.__v.base.QueryInterface(@ptrCast(self), guid, outobj);
+    }
+    pub inline fn AddRef(self: *SourceReaderCallback) ULONG {
+        return self.__v.base.AddRef(@ptrCast(self));
+    }
+    pub inline fn Release(self: *SourceReaderCallback) ULONG {
+        return self.__v.base.Release(@ptrCast(self));
+    }
 
     const vtable = mf.ISourceReaderCallback.VTable{
         .base = .{
@@ -615,14 +621,22 @@ const SoundPool = struct {
 };
 
 const SimpleAudioProcessor = extern struct {
-    usingnamespace xapo.IXAPO.Methods(@This());
     __v: *const xapo.IXAPO.VTable = &vtable,
-
     refcount: u32 = 1,
     is_locked: bool = false,
     num_channels: u16 = 0,
     process: *const fn ([*]f32, u32, u32, ?*anyopaque) callconv(.C) void,
     context: ?*anyopaque,
+
+    pub inline fn QueryInterface(self: *SimpleAudioProcessor, guid: *const windows.GUID, outobj: ?*?*anyopaque) HRESULT {
+        return self.__v.base.QueryInterface(@ptrCast(self), guid, outobj);
+    }
+    pub inline fn AddRef(self: *SimpleAudioProcessor) ULONG {
+        return self.__v.base.AddRef(@ptrCast(self));
+    }
+    pub inline fn Release(self: *SimpleAudioProcessor) ULONG {
+        return self.__v.base.Release(@ptrCast(self));
+    }
 
     const vtable = xapo.IXAPO.VTable{
         .base = .{

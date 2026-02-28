@@ -1,5 +1,6 @@
 const windows = @import("../windows.zig");
 const IUnknown = windows.IUnknown;
+const ULONG = windows.ULONG;
 const HRESULT = windows.HRESULT;
 const WINAPI = windows.WINAPI;
 const GUID = windows.GUID;
@@ -13,19 +14,18 @@ pub const GPU_BASED_VALIDATION_FLAGS = packed struct(UINT) {
 
 pub const IDebug = extern struct {
     __v: *const VTable,
-
-    pub usingnamespace Methods(@This());
-
-    pub fn Methods(comptime T: type) type {
-        return extern struct {
-            pub usingnamespace IUnknown.Methods(T);
-
-            pub inline fn EnableDebugLayer(self: *T) void {
-                @as(*const IDebug.VTable, @ptrCast(self.__v)).EnableDebugLayer(@as(*IDebug, @ptrCast(self)));
-            }
-        };
+    pub inline fn QueryInterface(self: *IDebug, guid: *const GUID, outobj: ?*?*anyopaque) HRESULT {
+        return IUnknown.QueryInterface(@ptrCast(self), guid, outobj);
     }
-
+    pub inline fn AddRef(self: *IDebug) ULONG {
+        return IUnknown.AddRef(@ptrCast(self));
+    }
+    pub inline fn Release(self: *IDebug) ULONG {
+        return IUnknown.Release(@ptrCast(self));
+    }
+    pub inline fn EnableDebugLayer(self: *IDebug) void {
+        self.__v.EnableDebugLayer(self);
+    }
     pub const VTable = extern struct {
         base: IUnknown.VTable,
         EnableDebugLayer: *const fn (*IDebug) callconv(WINAPI) void,
@@ -34,27 +34,24 @@ pub const IDebug = extern struct {
 
 pub const IDebug1 = extern struct {
     __v: *const VTable,
-
-    pub usingnamespace Methods(@This());
-
-    pub fn Methods(comptime T: type) type {
-        return extern struct {
-            pub usingnamespace IUnknown.Methods(T);
-
-            pub inline fn EnableDebugLayer(self: *T) void {
-                @as(*const IDebug1.VTable, @ptrCast(self.__v)).EnableDebugLayer(@as(*IDebug1, @ptrCast(self)));
-            }
-            pub inline fn SetEnableGPUBasedValidation(self: *T, enable: BOOL) void {
-                @as(*const IDebug1.VTable, @ptrCast(self.__v))
-                    .SetEnableGPUBasedValidation(@as(*IDebug1, @ptrCast(self)), enable);
-            }
-            pub inline fn SetEnableSynchronizedCommandQueueValidation(self: *T, enable: BOOL) void {
-                @as(*const IDebug1.VTable, @ptrCast(self.__v))
-                    .SetEnableSynchronizedCommandQueueValidation(@as(*IDebug1, @ptrCast(self)), enable);
-            }
-        };
+    pub inline fn QueryInterface(self: *IDebug1, guid: *const GUID, outobj: ?*?*anyopaque) HRESULT {
+        return IUnknown.QueryInterface(@ptrCast(self), guid, outobj);
     }
-
+    pub inline fn AddRef(self: *IDebug1) ULONG {
+        return IUnknown.AddRef(@ptrCast(self));
+    }
+    pub inline fn Release(self: *IDebug1) ULONG {
+        return IUnknown.Release(@ptrCast(self));
+    }
+    pub inline fn EnableDebugLayer(self: *IDebug1) void {
+        self.__v.EnableDebugLayer(self);
+    }
+    pub inline fn SetEnableGPUBasedValidation(self: *IDebug1, enable: BOOL) void {
+        self.__v.SetEnableGPUBasedValidation(self, enable);
+    }
+    pub inline fn SetEnableSynchronizedCommandQueueValidation(self: *IDebug1, enable: BOOL) void {
+        self.__v.SetEnableSynchronizedCommandQueueValidation(self, enable);
+    }
     pub const VTable = extern struct {
         base: IUnknown.VTable,
         EnableDebugLayer: *const fn (*IDebug1) callconv(WINAPI) void,
@@ -65,20 +62,18 @@ pub const IDebug1 = extern struct {
 
 pub const IDebug2 = extern struct {
     __v: *const VTable,
-
-    pub usingnamespace Methods(@This());
-
-    pub fn Methods(comptime T: type) type {
-        return extern struct {
-            pub usingnamespace IUnknown.Methods(T);
-
-            pub inline fn SetGPUBasedValidationFlags(self: *T, flags: GPU_BASED_VALIDATION_FLAGS) void {
-                @as(*const IDebug2.VTable, @ptrCast(self.__v))
-                    .SetGPUBasedValidationFlags(@as(*IDebug2, @ptrCast(self)), flags);
-            }
-        };
+    pub inline fn QueryInterface(self: *IDebug2, guid: *const GUID, outobj: ?*?*anyopaque) HRESULT {
+        return IUnknown.QueryInterface(@ptrCast(self), guid, outobj);
     }
-
+    pub inline fn AddRef(self: *IDebug2) ULONG {
+        return IUnknown.AddRef(@ptrCast(self));
+    }
+    pub inline fn Release(self: *IDebug2) ULONG {
+        return IUnknown.Release(@ptrCast(self));
+    }
+    pub inline fn SetGPUBasedValidationFlags(self: *IDebug2, flags: GPU_BASED_VALIDATION_FLAGS) void {
+        self.__v.SetGPUBasedValidationFlags(self, flags);
+    }
     pub const VTable = extern struct {
         base: IUnknown.VTable,
         SetGPUBasedValidationFlags: *const fn (*IDebug2, GPU_BASED_VALIDATION_FLAGS) callconv(WINAPI) void,
@@ -87,28 +82,27 @@ pub const IDebug2 = extern struct {
 
 pub const IDebug3 = extern struct {
     __v: *const VTable,
-
-    pub usingnamespace Methods(@This());
-
-    pub fn Methods(comptime T: type) type {
-        return extern struct {
-            pub usingnamespace IDebug.Methods(T);
-
-            pub inline fn SetEnableGPUBasedValidation(self: *T, enable: BOOL) void {
-                @as(*const IDebug3.VTable, @ptrCast(self.__v))
-                    .SetEnableGPUBasedValidation(@as(*IDebug3, @ptrCast(self)), enable);
-            }
-            pub inline fn SetEnableSynchronizedCommandQueueValidation(self: *T, enable: BOOL) void {
-                @as(*const IDebug3.VTable, @ptrCast(self.__v))
-                    .SetEnableSynchronizedCommandQueueValidation(@as(*IDebug3, @ptrCast(self)), enable);
-            }
-            pub inline fn SetGPUBasedValidationFlags(self: *T, flags: GPU_BASED_VALIDATION_FLAGS) void {
-                @as(*const IDebug3.VTable, @ptrCast(self.__v))
-                    .SetGPUBasedValidationFlags(@as(*IDebug3, @ptrCast(self)), flags);
-            }
-        };
+    pub inline fn QueryInterface(self: *IDebug3, guid: *const GUID, outobj: ?*?*anyopaque) HRESULT {
+        return IDebug.QueryInterface(@ptrCast(self), guid, outobj);
     }
-
+    pub inline fn AddRef(self: *IDebug3) ULONG {
+        return IDebug.AddRef(@ptrCast(self));
+    }
+    pub inline fn Release(self: *IDebug3) ULONG {
+        return IDebug.Release(@ptrCast(self));
+    }
+    pub inline fn EnableDebugLayer(self: *IDebug3) void {
+        IDebug.EnableDebugLayer(@ptrCast(self));
+    }
+    pub inline fn SetEnableGPUBasedValidation(self: *IDebug3, enable: BOOL) void {
+        self.__v.SetEnableGPUBasedValidation(self, enable);
+    }
+    pub inline fn SetEnableSynchronizedCommandQueueValidation(self: *IDebug3, enable: BOOL) void {
+        self.__v.SetEnableSynchronizedCommandQueueValidation(self, enable);
+    }
+    pub inline fn SetGPUBasedValidationFlags(self: *IDebug3, flags: GPU_BASED_VALIDATION_FLAGS) void {
+        self.__v.SetGPUBasedValidationFlags(self, flags);
+    }
     pub const VTable = extern struct {
         base: IDebug.VTable,
         SetEnableGPUBasedValidation: *const fn (*IDebug3, BOOL) callconv(WINAPI) void,
@@ -119,19 +113,30 @@ pub const IDebug3 = extern struct {
 
 pub const IDebug4 = extern struct {
     __v: *const VTable,
-
-    pub usingnamespace Methods(@This());
-
-    pub fn Methods(comptime T: type) type {
-        return extern struct {
-            pub usingnamespace IDebug3.Methods(T);
-
-            pub inline fn DisableDebugLayer(self: *T) void {
-                @as(*const IDebug4.VTable, @ptrCast(self.__v)).DisableDebugLayer(@as(*IDebug4, @ptrCast(self)));
-            }
-        };
+    pub inline fn QueryInterface(self: *IDebug4, guid: *const GUID, outobj: ?*?*anyopaque) HRESULT {
+        return IDebug3.QueryInterface(@ptrCast(self), guid, outobj);
     }
-
+    pub inline fn AddRef(self: *IDebug4) ULONG {
+        return IDebug3.AddRef(@ptrCast(self));
+    }
+    pub inline fn Release(self: *IDebug4) ULONG {
+        return IDebug3.Release(@ptrCast(self));
+    }
+    pub inline fn EnableDebugLayer(self: *IDebug4) void {
+        IDebug3.EnableDebugLayer(@ptrCast(self));
+    }
+    pub inline fn SetEnableGPUBasedValidation(self: *IDebug4, enable: BOOL) void {
+        IDebug3.SetEnableGPUBasedValidation(@ptrCast(self), enable);
+    }
+    pub inline fn SetEnableSynchronizedCommandQueueValidation(self: *IDebug4, enable: BOOL) void {
+        IDebug3.SetEnableSynchronizedCommandQueueValidation(@ptrCast(self), enable);
+    }
+    pub inline fn SetGPUBasedValidationFlags(self: *IDebug4, flags: GPU_BASED_VALIDATION_FLAGS) void {
+        IDebug3.SetGPUBasedValidationFlags(@ptrCast(self), flags);
+    }
+    pub inline fn DisableDebugLayer(self: *IDebug4) void {
+        self.__v.DisableDebugLayer(self);
+    }
     pub const VTable = extern struct {
         base: IDebug3.VTable,
         DisableDebugLayer: *const fn (*IDebug4) callconv(WINAPI) void,
@@ -140,19 +145,33 @@ pub const IDebug4 = extern struct {
 
 pub const IDebug5 = extern struct {
     __v: *const VTable,
-
-    pub usingnamespace Methods(@This());
-
-    pub fn Methods(comptime T: type) type {
-        return extern struct {
-            pub usingnamespace IDebug4.Methods(T);
-
-            pub inline fn SetEnableAutoName(self: *T, enable: BOOL) void {
-                @as(*const IDebug5.VTable, @ptrCast(self.__v)).SetEnableAutoName(@as(*IDebug5, @ptrCast(self)), enable);
-            }
-        };
+    pub inline fn QueryInterface(self: *IDebug5, guid: *const GUID, outobj: ?*?*anyopaque) HRESULT {
+        return IDebug4.QueryInterface(@ptrCast(self), guid, outobj);
     }
-
+    pub inline fn AddRef(self: *IDebug5) ULONG {
+        return IDebug4.AddRef(@ptrCast(self));
+    }
+    pub inline fn Release(self: *IDebug5) ULONG {
+        return IDebug4.Release(@ptrCast(self));
+    }
+    pub inline fn EnableDebugLayer(self: *IDebug5) void {
+        IDebug4.EnableDebugLayer(@ptrCast(self));
+    }
+    pub inline fn SetEnableGPUBasedValidation(self: *IDebug5, enable: BOOL) void {
+        IDebug4.SetEnableGPUBasedValidation(@ptrCast(self), enable);
+    }
+    pub inline fn SetEnableSynchronizedCommandQueueValidation(self: *IDebug5, enable: BOOL) void {
+        IDebug4.SetEnableSynchronizedCommandQueueValidation(@ptrCast(self), enable);
+    }
+    pub inline fn SetGPUBasedValidationFlags(self: *IDebug5, flags: GPU_BASED_VALIDATION_FLAGS) void {
+        IDebug4.SetGPUBasedValidationFlags(@ptrCast(self), flags);
+    }
+    pub inline fn DisableDebugLayer(self: *IDebug5) void {
+        IDebug4.DisableDebugLayer(@ptrCast(self));
+    }
+    pub inline fn SetEnableAutoName(self: *IDebug5, enable: BOOL) void {
+        self.__v.SetEnableAutoName(self, enable);
+    }
     pub const VTable = extern struct {
         base: IDebug4.VTable,
         SetEnableAutoName: *const fn (*IDebug5, BOOL) callconv(WINAPI) void,
@@ -203,30 +222,27 @@ pub const INFO_QUEUE_FILTER = extern struct {
 
 pub const IInfoQueue = extern struct {
     __v: *const VTable,
-
-    pub usingnamespace Methods(@This());
-
-    pub fn Methods(comptime T: type) type {
-        return extern struct {
-            pub usingnamespace IUnknown.Methods(T);
-
-            pub inline fn AddStorageFilterEntries(self: *T, filter: *INFO_QUEUE_FILTER) HRESULT {
-                return @as(*const IInfoQueue.VTable, @ptrCast(self.__v))
-                    .AddStorageFilterEntries(@as(*IInfoQueue, @ptrCast(self)), filter);
-            }
-            pub inline fn PushStorageFilter(self: *T, filter: *INFO_QUEUE_FILTER) HRESULT {
-                return @as(*const IInfoQueue.VTable, @ptrCast(self.__v))
-                    .PushStorageFilter(@as(*IInfoQueue, @ptrCast(self)), filter);
-            }
-            pub inline fn PopStorageFilter(self: *T) void {
-                @as(*const IInfoQueue.VTable, @ptrCast(self.__v)).PopStorageFilter(@as(*IInfoQueue, @ptrCast(self)));
-            }
-            pub inline fn SetMuteDebugOutput(self: *T, mute: BOOL) void {
-                @as(*const IInfoQueue.VTable, @ptrCast(self.__v)).SetMuteDebugOutput(@as(*IInfoQueue, @ptrCast(self)), mute);
-            }
-        };
+    pub inline fn QueryInterface(self: *IInfoQueue, guid: *const GUID, outobj: ?*?*anyopaque) HRESULT {
+        return IUnknown.QueryInterface(@ptrCast(self), guid, outobj);
     }
-
+    pub inline fn AddRef(self: *IInfoQueue) ULONG {
+        return IUnknown.AddRef(@ptrCast(self));
+    }
+    pub inline fn Release(self: *IInfoQueue) ULONG {
+        return IUnknown.Release(@ptrCast(self));
+    }
+    pub inline fn AddStorageFilterEntries(self: *IInfoQueue, filter: *INFO_QUEUE_FILTER) HRESULT {
+        return self.__v.AddStorageFilterEntries(self, filter);
+    }
+    pub inline fn PushStorageFilter(self: *IInfoQueue, filter: *INFO_QUEUE_FILTER) HRESULT {
+        return self.__v.PushStorageFilter(self, filter);
+    }
+    pub inline fn PopStorageFilter(self: *IInfoQueue) void {
+        self.__v.PopStorageFilter(self);
+    }
+    pub inline fn SetMuteDebugOutput(self: *IInfoQueue, mute: BOOL) void {
+        self.__v.SetMuteDebugOutput(self, mute);
+    }
     pub const VTable = extern struct {
         const T = IInfoQueue;
         base: IUnknown.VTable,

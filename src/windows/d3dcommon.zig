@@ -5,6 +5,8 @@ const WINAPI = windows.WINAPI;
 const SIZE_T = windows.SIZE_T;
 const LPCSTR = windows.LPCSTR;
 const GUID = windows.GUID;
+const ULONG = windows.ULONG;
+const HRESULT = windows.HRESULT;
 
 pub const PRIMITIVE_TOPOLOGY = enum(UINT) {
     UNDEFINED = 0,
@@ -87,22 +89,21 @@ pub const INCLUDE_TYPE = enum(UINT) {
 pub const IID_IBlob = GUID.parse("{8BA5FB08-5195-40e2-AC58-0D989C3A0102}");
 pub const IBlob = extern struct {
     __v: *const VTable,
-
-    pub usingnamespace Methods(@This());
-
-    pub fn Methods(comptime T: type) type {
-        return extern struct {
-            pub usingnamespace IUnknown.Methods(T);
-
-            pub inline fn GetBufferPointer(self: *T) *anyopaque {
-                return @as(*const IBlob.VTable, @ptrCast(self.__v)).GetBufferPointer(@as(*IBlob, @ptrCast(self)));
-            }
-            pub inline fn GetBufferSize(self: *T) SIZE_T {
-                return @as(*const IBlob.VTable, @ptrCast(self.__v)).GetBufferSize(@as(*IBlob, @ptrCast(self)));
-            }
-        };
+    pub inline fn QueryInterface(self: *IBlob, guid: *const GUID, outobj: ?*?*anyopaque) HRESULT {
+        return IUnknown.QueryInterface(@ptrCast(self), guid, outobj);
     }
-
+    pub inline fn AddRef(self: *IBlob) ULONG {
+        return IUnknown.AddRef(@ptrCast(self));
+    }
+    pub inline fn Release(self: *IBlob) ULONG {
+        return IUnknown.Release(@ptrCast(self));
+    }
+    pub inline fn GetBufferPointer(self: *IBlob) *anyopaque {
+        return self.__v.GetBufferPointer(self);
+    }
+    pub inline fn GetBufferSize(self: *IBlob) SIZE_T {
+        return self.__v.GetBufferSize(self);
+    }
     pub const VTable = extern struct {
         base: IUnknown.VTable,
         GetBufferPointer: *const fn (*IBlob) callconv(WINAPI) *anyopaque,
