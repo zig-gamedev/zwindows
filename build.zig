@@ -67,9 +67,11 @@ pub fn build(b: *std.Build) !void {
         const test_step = b.step("test", "Run library tests");
 
         const tests = b.addTest(.{
-            .root_source_file = b.path("src/tests.zig"),
-            .target = target,
-            .optimize = optimize,
+            .root_module = b.createModule(.{
+                .root_source_file = b.path("src/tests.zig"),
+                .target = target,
+                .optimize = optimize,
+            }),
         });
         tests.root_module.addImport("zwindows", zwindows_module);
         tests.root_module.addImport("zd3d12", zd3d12_module);
