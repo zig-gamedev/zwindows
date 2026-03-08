@@ -945,7 +945,7 @@ pub const GraphicsContext = struct {
         if (Data != FeatureData) {
             @compileError("expected " ++ @typeName(FeatureData) ++ " but was " ++ @typeName(Data));
         }
-        try hrErrorOnFail(gctx.device.CheckFeatureSupport(feature, @constCast(@ptrCast(&data)), @sizeOf(FeatureData)));
+        try hrErrorOnFail(gctx.device.CheckFeatureSupport(feature, @ptrCast(@constCast(&data)), @sizeOf(FeatureData)));
     }
 
     pub fn createCommittedResource(
@@ -1221,7 +1221,7 @@ pub const GraphicsContext = struct {
         assert(pso_desc.VS.pShaderBytecode != null);
 
         const hash = compute_hash: {
-            var hasher = std.hash.Adler32.init();
+            var hasher: std.hash.Adler32 = .{};
             hasher.update(
                 @as([*]const u8, @ptrCast(pso_desc.VS.pShaderBytecode.?))[0..@intCast(pso_desc.VS.BytecodeLength)],
             );
@@ -1259,7 +1259,7 @@ pub const GraphicsContext = struct {
                     hasher.update(std.mem.asBytes(&elements[i].InstanceDataStepRate));
                 }
             }
-            break :compute_hash hasher.final();
+            break :compute_hash hasher.adler;
         };
         std.log.info("[graphics] Graphics pipeline hash: {d}", .{hash});
 
@@ -1301,7 +1301,7 @@ pub const GraphicsContext = struct {
         assert(pso_desc.PS.pShaderBytecode != null);
 
         const hash = compute_hash: {
-            var hasher = std.hash.Adler32.init();
+            var hasher: std.hash.Adler32 = .{};
             hasher.update(
                 @as([*]const u8, @ptrCast(pso_desc.MS.pShaderBytecode.?))[0..@intCast(pso_desc.MS.BytecodeLength)],
             );
@@ -1322,7 +1322,7 @@ pub const GraphicsContext = struct {
             hasher.update(std.mem.asBytes(&pso_desc.RTVFormats));
             hasher.update(std.mem.asBytes(&pso_desc.DSVFormat));
             hasher.update(std.mem.asBytes(&pso_desc.SampleDesc));
-            break :compute_hash hasher.final();
+            break :compute_hash hasher.adler;
         };
         std.log.info("[graphics] Mesh shader pipeline hash: {d}", .{hash});
 
@@ -1367,11 +1367,11 @@ pub const GraphicsContext = struct {
         assert(pso_desc.CS.pShaderBytecode != null);
 
         const hash = compute_hash: {
-            var hasher = std.hash.Adler32.init();
+            var hasher: std.hash.Adler32 = .{};
             hasher.update(
                 @as([*]const u8, @ptrCast(pso_desc.CS.pShaderBytecode.?))[0..@intCast(pso_desc.CS.BytecodeLength)],
             );
-            break :compute_hash hasher.final();
+            break :compute_hash hasher.adler;
         };
         std.log.info("[graphics] Compute pipeline hash: {d}", .{hash});
 
@@ -1809,8 +1809,8 @@ pub const GraphicsContext = struct {
         }) catch unreachable;
 
         // Load DDS data into D3D12_SUBRESOURCE_DATA
-        var subresources = std.ArrayList(d3d12.SUBRESOURCE_DATA).init(arena);
-        defer subresources.deinit();
+        var subresources: std.ArrayList(d3d12.SUBRESOURCE_DATA) = .empty;
+        defer subresources.deinit(arena);
 
         const dds_info = try dds_loader.loadTextureFromFile(abspath, arena, gctx.device, 0, &subresources);
         assert(dds_info.resource_dimension == .TEXTURE2D);

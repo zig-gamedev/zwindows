@@ -128,9 +128,9 @@ pub fn loadTextureFromFile(
     };
     defer file.close();
 
-    const metadata = try file.metadata();
+    const file_stat = try file.stat();
 
-    const file_size = metadata.size();
+    const file_size = file_stat.size;
     if (file_size < @sizeOf(u32) + @sizeOf(DDS_HEADER)) {
         return DdsError.InvalidDDSData;
     }
@@ -151,7 +151,7 @@ pub fn loadTextureFromMemory(file_data: []u8, arena: std.mem.Allocator, device: 
     }
 
     // Create a stream
-    var stream = std.io.StreamSource{ .buffer = std.io.fixedBufferStream(file_data) };
+    var stream = std.io.fixedBufferStream(file_data);
     var reader = stream.reader();
 
     // Check DDS_MAGIC
@@ -379,7 +379,7 @@ pub fn loadTextureFromMemory(file_data: []u8, arena: std.mem.Allocator, device: 
 
                     adjustPlaneResource(format, h, plane_index, &resource);
 
-                    resources.append(resource) catch unreachable;
+                    resources.append(arena, resource) catch unreachable;
                 } else if (mip_map_index == 0) {
                     skip_mip += 1;
                 }

@@ -4,7 +4,7 @@
 
 const std = @import("std");
 
-pub const WINAPI = std.os.windows.WINAPI;
+pub const WINAPI: std.builtin.CallingConvention = .winapi;
 pub const S_OK = std.os.windows.S_OK;
 pub const S_FALSE = std.os.windows.S_FALSE;
 pub const E_NOTIMPL = std.os.windows.E_NOTIMPL;

@@ -15,17 +15,17 @@ pub fn build(b: *std.Build) !void {
     const options = .{
         .zxaudio2_debug_layer = b.option(
             bool,
-            "zxaudio2_debug_layer",
+            "zxaudio2-debug-layer",
             "Enable XAudio2 debug layer",
         ) orelse false,
         .zd3d12_debug_layer = b.option(
             bool,
-            "zd3d12_debug_layer",
+            "zd3d12-debug-layer",
             "Enable DirectX 12 debug layer",
         ) orelse false,
         .zd3d12_gbv = b.option(
             bool,
-            "zd3d12_gbv",
+            "zd3d12-gbv",
             "Enable DirectX 12 GPU-Based Validation (GBV)",
         ) orelse false,
     };

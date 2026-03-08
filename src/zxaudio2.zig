@@ -84,7 +84,7 @@ pub const AudioContext = struct {
             break :blk voice.?;
         };
 
-        var source_voices = std.ArrayList(*xaudio2.ISourceVoice).init(allocator);
+        var source_voices: std.ArrayList(*xaudio2.ISourceVoice) = .empty;
         {
             var i: u32 = 0;
             while (i < 32) : (i += 1) {
@@ -98,7 +98,7 @@ pub const AudioContext = struct {
                     null,
                     null,
                 ));
-                source_voices.append(voice.?) catch unreachable;
+                source_voices.append(allocator, voice.?) catch unreachable;
             }
         }
 
@@ -120,7 +120,7 @@ pub const AudioContext = struct {
         for (actx.source_voices.items) |voice| {
             voice.DestroyVoice();
         }
-        actx.source_voices.deinit();
+        actx.source_voices.deinit(actx.allocator);
         actx.master_voice.DestroyVoice();
         _ = actx.device.Release();
         actx.* = undefined;
@@ -146,7 +146,7 @@ pub const AudioContext = struct {
                 null,
                 null,
             ));
-            actx.source_voices.append(voice.?) catch unreachable;
+            actx.source_voices.append(actx.allocator, voice.?) catch unreachable;
             break :blk voice.?;
         };
 
@@ -497,7 +497,7 @@ fn loadBufferData(allocator: std.mem.Allocator, audio_file_path: [:0]const u16) 
     hrPanicOnFail(media_type.SetUINT32(&mf.MT_ALL_SAMPLES_INDEPENDENT, windows.TRUE));
     hrPanicOnFail(source_reader.SetCurrentMediaType(mf.SOURCE_READER_FIRST_AUDIO_STREAM, null, media_type));
 
-    var data = std.ArrayList(u8).init(allocator);
+    var data: std.ArrayList(u8) = .empty;
     while (true) {
         var flags: mf.SOURCE_READER_FLAG = .{};
         var sample: ?*mf.ISample = null;
@@ -523,10 +523,10 @@ fn loadBufferData(allocator: std.mem.Allocator, audio_file_path: [:0]const u16) 
         var data_ptr: [*]u8 = undefined;
         var data_len: u32 = 0;
         hrPanicOnFail(buffer.Lock(&data_ptr, null, &data_len));
-        data.appendSlice(data_ptr[0..data_len]) catch unreachable;
+        data.appendSlice(allocator, data_ptr[0..data_len]) catch unreachable;
         hrPanicOnFail(buffer.Unlock());
     }
-    return data.toOwnedSlice() catch unreachable;
+    return data.toOwnedSlice(allocator) catch unreachable;
 }
 
 pub const SoundHandle = struct {
@@ -625,7 +625,7 @@ const SimpleAudioProcessor = extern struct {
     refcount: u32 = 1,
     is_locked: bool = false,
     num_channels: u16 = 0,
-    process: *const fn ([*]f32, u32, u32, ?*anyopaque) callconv(.C) void,
+    process: *const fn ([*]f32, u32, u32, ?*anyopaque) callconv(.c) void,
     context: ?*anyopaque,
 
     pub inline fn QueryInterface(self: *SimpleAudioProcessor, guid: *const windows.GUID, outobj: ?*?*anyopaque) HRESULT {
@@ -867,7 +867,7 @@ const SimpleAudioProcessor = extern struct {
 };
 
 pub fn createSimpleProcessor(
-    process: *const fn ([*]f32, u32, u32, ?*anyopaque) callconv(.C) void,
+    process: *const fn ([*]f32, u32, u32, ?*anyopaque) callconv(.c) void,
     context: ?*anyopaque,
 ) *IUnknown {
     const ptr = windows.CoTaskMemAlloc(@sizeOf(SimpleAudioProcessor)).?;

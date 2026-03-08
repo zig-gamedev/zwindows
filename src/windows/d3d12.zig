@@ -2677,7 +2677,7 @@ pub const IGraphicsCommandList = extern struct {
     pub const VTable = extern struct {
         const T = IGraphicsCommandList;
         base: ICommandList.VTable,
-        Close: *const fn (*T) callconv(.C) HRESULT,
+        Close: *const fn (*T) callconv(.c) HRESULT,
         Reset: *const fn (*T, *ICommandAllocator, ?*IPipelineState) callconv(WINAPI) HRESULT,
         ClearState: *const fn (*T, ?*IPipelineState) callconv(WINAPI) void,
         DrawInstanced: *const fn (*T, UINT, UINT, UINT, UINT) callconv(WINAPI) void,
