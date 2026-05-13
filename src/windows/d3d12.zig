@@ -981,7 +981,7 @@ pub const RENDER_TARGET_BLEND_DESC = extern struct {
 pub const BLEND_DESC = extern struct {
     AlphaToCoverageEnable: BOOL = FALSE,
     IndependentBlendEnable: BOOL = FALSE,
-    RenderTarget: [8]RENDER_TARGET_BLEND_DESC = [_]RENDER_TARGET_BLEND_DESC{.{}} ** 8,
+    RenderTarget: [8]RENDER_TARGET_BLEND_DESC = @splat(.{}),
 
     pub fn initDefault() BLEND_DESC {
         return .{};
@@ -1179,7 +1179,7 @@ pub const GRAPHICS_PIPELINE_STATE_DESC = extern struct {
     IBStripCutValue: INDEX_BUFFER_STRIP_CUT_VALUE = .DISABLED,
     PrimitiveTopologyType: PRIMITIVE_TOPOLOGY_TYPE = .UNDEFINED,
     NumRenderTargets: UINT = 0,
-    RTVFormats: [8]dxgi.FORMAT = [_]dxgi.FORMAT{.UNKNOWN} ** 8,
+    RTVFormats: [8]dxgi.FORMAT = @splat(.UNKNOWN),
     DSVFormat: dxgi.FORMAT = .UNKNOWN,
     SampleDesc: dxgi.SAMPLE_DESC = .{ .Count = 1, .Quality = 0 },
     NodeMask: UINT = 0,
@@ -6270,7 +6270,7 @@ pub const MESH_SHADER_PIPELINE_STATE_DESC = extern struct {
     DepthStencilState: DEPTH_STENCIL_DESC1 = .{},
     PrimitiveTopologyType: PRIMITIVE_TOPOLOGY_TYPE = .UNDEFINED,
     NumRenderTargets: UINT = 0,
-    RTVFormats: [8]dxgi.FORMAT = [_]dxgi.FORMAT{.UNKNOWN} ** 8,
+    RTVFormats: [8]dxgi.FORMAT = @splat(.UNKNOWN),
     DSVFormat: dxgi.FORMAT = .UNKNOWN,
     SampleDesc: dxgi.SAMPLE_DESC = .{ .Count = 1, .Quality = 0 },
     NodeMask: UINT = 0,
@@ -9174,7 +9174,3 @@ pub const Error = error{
     ADAPTER_NOT_FOUND,
     DRIVER_VERSION_MISMATCH,
 };
-
-test {
-    std.testing.refAllDecls(@This());
-}

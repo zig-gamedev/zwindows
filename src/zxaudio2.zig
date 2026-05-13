@@ -658,8 +658,8 @@ const SimpleAudioProcessor = extern struct {
 
     const info = xapo.REGISTRATION_PROPERTIES{
         .clsid = windows.GUID_NULL,
-        .FriendlyName = [_]windows.WCHAR{0} ** xapo.REGISTRATION_STRING_LENGTH,
-        .CopyrightInfo = [_]windows.WCHAR{0} ** xapo.REGISTRATION_STRING_LENGTH,
+        .FriendlyName = @as([xapo.REGISTRATION_STRING_LENGTH]windows.WCHAR, @splat(0)),
+        .CopyrightInfo = @as([xapo.REGISTRATION_STRING_LENGTH]windows.WCHAR, @splat(0)),
         .MajorVersion = 1,
         .MinorVersion = 0,
         .Flags = .{
